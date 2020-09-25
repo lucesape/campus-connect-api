@@ -19,3 +19,10 @@ Backend Repo for campus connect network
 ### 2. Run "set DYNAMO_ENDPOINT=http://localhost:8000" (default in our case)
 ### 3. Run "dynamodb-admin"
 #### This will start a server at port:8081. Go to localhost:8081 for the GUI of our database
+
+## Database Details
+### The Database has a User Table
+### Attributes are:
+  #### userId (Number) -> HashKey
+  #### userName (String) -> Range Key
+### Other attributes are added in the Java Code
