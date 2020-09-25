@@ -13,3 +13,9 @@ Backend Repo for campus connect network
 ### In applications.properties
 #### Port, accesskeys, for dynamoDB etc are specified
 #### Java project will start on port 8080
+
+## For GUI of local DynamoDB
+### 1. Run "npm install dynamodb-admin"
+### 2. Run "set DYNAMO_ENDPOINT=http://localhost:8000" (default in our case)
+### 3. Run "dynamodb-admin"
+#### This will start a server at port:8081. Go to localhost:8081 for the GUI of our database
