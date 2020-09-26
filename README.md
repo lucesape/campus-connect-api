@@ -16,7 +16,7 @@ Backend Repo for campus connect network
 
 ## For GUI of local DynamoDB
 ### 1. Run "npm install dynamodb-admin -g"
-### 2. Run "set DYNAMO_ENDPOINT=http://localhost:8000" (default in our case)
+### 2. Run "set DYNAMO_ENDPOINT=https://hidden-beyond-89623.herokuapp.com/" (default in our case)
 ### 3. Run "dynamodb-admin"
 #### This will start a server at port:8001. Go to localhost:8001 for the GUI of our database
 
