@@ -15,7 +15,7 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import com.campussocialmedia.campussocialmedia.MyUserDetailsService;
+import com.campussocialmedia.campussocialmedia.service.MyUserDetailsService;
 import com.campussocialmedia.campussocialmedia.util.JwtUtil;
 
 @Component

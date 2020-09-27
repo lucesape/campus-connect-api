@@ -1,4 +1,4 @@
-package com.campussocialmedia.campussocialmedia;
+package com.campussocialmedia.campussocialmedia.service;
 
 import java.util.ArrayList;
 
@@ -9,13 +9,13 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import com.campussocialmedia.campussocialmedia.repository.UserRepository;
+import com.campussocialmedia.campussocialmedia.entity.UserDTO;
 
 @Service
 public class MyUserDetailsService implements UserDetailsService {
 
 	@Autowired
-	private UserRepository repository;
+	private UserService service;
 
 	@Override
 	public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
@@ -23,11 +23,8 @@ public class MyUserDetailsService implements UserDetailsService {
 		String userName;
 		String password;
 
-		System.out.println("UserName from the token");
-		System.out.println(s);
-
 		try {
-			com.campussocialmedia.campussocialmedia.entity.User user = repository.findUserByUserName(s);
+			UserDTO user = service.getUserByUserName(s);
 			userName = user.getUserName();
 			password = user.getPassword();
 		} catch (UsernameNotFoundException e) {

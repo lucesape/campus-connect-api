@@ -10,7 +10,7 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBSaveExpression;
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import com.amazonaws.services.dynamodbv2.model.ExpectedAttributeValue;
-import com.campussocialmedia.campussocialmedia.entity.User;
+import com.campussocialmedia.campussocialmedia.entity.UserDBEntity;
 
 @Repository
 public class UserRepository {
@@ -18,30 +18,30 @@ public class UserRepository {
 	@Autowired
 	private DynamoDBMapper mapper;
 
-	public User addUser(User user) {
+	public UserDBEntity addUser(UserDBEntity user) {
 		mapper.save(user);
 		return user;
 	}
 
-	public User findUserByIdAndUserName(Long userId, String userName) {
-		return mapper.load(User.class, userName);
+	public UserDBEntity findUserByIdAndUserName(Long userId, String userName) {
+		return mapper.load(UserDBEntity.class, userName);
 	}
 
-	public User findUserByUserName(String userName) {
-		return mapper.load(User.class, userName);
+	public UserDBEntity findUserByUserName(String userName) {
+		return mapper.load(UserDBEntity.class, userName);
 	}
 
-	public String deleteUser(User user) {
+	public String deleteUser(UserDBEntity user) {
 		mapper.delete(user);
 		return "User Deleted";
 	}
 
-	public String editPerson(User user) {
+	public String editPerson(UserDBEntity user) {
 		mapper.save(user, buildExpression(user));
 		return "User Updated";
 	}
 
-	private DynamoDBSaveExpression buildExpression(User user) {
+	private DynamoDBSaveExpression buildExpression(UserDBEntity user) {
 		DynamoDBSaveExpression dynamoDBSaveExpression = new DynamoDBSaveExpression();
 		Map<String, ExpectedAttributeValue> expectedMap = new HashMap<>();
 		expectedMap.put("userId", new ExpectedAttributeValue(new AttributeValue().withN(user.getUserId().toString())));

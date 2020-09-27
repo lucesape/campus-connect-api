@@ -7,7 +7,7 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
 
 @DynamoDBTable(tableName = "UserTable")
-public class User {
+public class UserDBEntity {
 	private Long userId;
 	private String userName;
 	private String email;
@@ -100,7 +100,7 @@ public class User {
 		this.groups = groups;
 	}
 
-	public User(Long userId, String userName, String email, String password, String firstName, String lastName,
+	public UserDBEntity(Long userId, String userName, String email, String password, String firstName, String lastName,
 			String phone, List<Long> personalChats, List<Long> groups) {
 		super();
 		this.userId = userId;
@@ -114,11 +114,11 @@ public class User {
 		this.groups = groups;
 	}
 
-	public User() {
+	public UserDBEntity() {
 		super();
 	}
 
-	public User(String userName, String password) {
+	public UserDBEntity(String userName, String password) {
 		super();
 		this.userName = userName;
 		this.password = password;
