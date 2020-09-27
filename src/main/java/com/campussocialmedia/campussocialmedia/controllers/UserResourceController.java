@@ -20,13 +20,15 @@ public class UserResourceController {
 	private UserService service;
 
 	@PostMapping("/user")
-	public User savePerson(@RequestBody User user) {
+	public User saveUser(@RequestBody User user) {
 		return service.addUser(user);
 	}
 
 	@GetMapping("/user/{userId}/{userName}")
-	public User findPerson(@PathVariable String userId, @PathVariable String userName) {
-		return service.getUserByIdAndUserName(userId, userName);
+	public User findUser(@PathVariable String userId, @PathVariable String userName) {
+		User userByIdAndUserName = service.getUserByIdAndUserName(userId, userName);
+		System.out.println(userByIdAndUserName);
+		return userByIdAndUserName;
 	}
 
 	@GetMapping("/userConvos/{userId}/{userName}")

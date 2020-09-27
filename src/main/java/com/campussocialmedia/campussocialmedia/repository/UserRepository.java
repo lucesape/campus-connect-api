@@ -24,7 +24,11 @@ public class UserRepository {
 	}
 
 	public User findUserByIdAndUserName(Long userId, String userName) {
-		return mapper.load(User.class, userId, userName);
+		return mapper.load(User.class, userName);
+	}
+
+	public User findUserByUserName(String userName) {
+		return mapper.load(User.class, userName);
 	}
 
 	public String deleteUser(User user) {

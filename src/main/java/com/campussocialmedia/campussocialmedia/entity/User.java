@@ -4,21 +4,22 @@ import java.util.List;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBRangeKey;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
 
-@DynamoDBTable(tableName = "User")
+@DynamoDBTable(tableName = "UserTable")
 public class User {
 	private Long userId;
 	private String userName;
 	private String email;
+	private String password;
+
 	private String firstName;
 	private String lastName;
 	private String phone;
 	private List<Long> personalChats;
 	private List<Long> groups;
 
-	@DynamoDBHashKey(attributeName = "userId")
+	@DynamoDBAttribute
 	public Long getUserId() {
 		return userId;
 	}
@@ -27,7 +28,7 @@ public class User {
 		this.userId = userId;
 	}
 
-	@DynamoDBRangeKey(attributeName = "userName")
+	@DynamoDBHashKey(attributeName = "userName")
 	public String getUserName() {
 		return userName;
 	}
@@ -43,6 +44,15 @@ public class User {
 
 	public void setEmail(String email) {
 		this.email = email;
+	}
+
+	@DynamoDBAttribute
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
 	}
 
 	@DynamoDBAttribute
@@ -90,15 +100,13 @@ public class User {
 		this.groups = groups;
 	}
 
-	public User() {
-	}
-
-	public User(Long userId, String userName, String email, String firstName, String lastName, String phone,
-			List<Long> personalChats, List<Long> groups) {
+	public User(Long userId, String userName, String email, String password, String firstName, String lastName,
+			String phone, List<Long> personalChats, List<Long> groups) {
 		super();
 		this.userId = userId;
 		this.userName = userName;
 		this.email = email;
+		this.password = password;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.phone = phone;
@@ -106,11 +114,21 @@ public class User {
 		this.groups = groups;
 	}
 
+	public User() {
+		super();
+	}
+
+	public User(String userName, String password) {
+		super();
+		this.userName = userName;
+		this.password = password;
+	}
+
 	@Override
 	public String toString() {
-		return "User [userId=" + userId + ", userName=" + userName + ", email=" + email + ", firstName=" + firstName
-				+ ", lastName=" + lastName + ", phone=" + phone + ", personalChats=" + personalChats + ", groups="
-				+ groups + "]";
+		return "User [userId=" + userId + ", userName=" + userName + ", email=" + email + ", password=" + password
+				+ ", firstName=" + firstName + ", lastName=" + lastName + ", phone=" + phone + ", personalChats="
+				+ personalChats + ", groups=" + groups + "]";
 	}
 
 }
