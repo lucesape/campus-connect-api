@@ -8,7 +8,7 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
 
 @DynamoDBTable(tableName = "UserTable")
 public class UserDBEntity {
-	private Long userId;
+	private String userId;
 	private String userName;
 	private String email;
 	private String password;
@@ -16,15 +16,15 @@ public class UserDBEntity {
 	private String firstName;
 	private String lastName;
 	private String phone;
-	private List<Long> personalChats;
-	private List<Long> groups;
+	private List<String> personalChats;
+	private List<String> groups;
 
 	@DynamoDBAttribute
-	public Long getUserId() {
+	public String getUserId() {
 		return userId;
 	}
 
-	public void setUserId(Long userId) {
+	public void setUserId(String userId) {
 		this.userId = userId;
 	}
 
@@ -83,25 +83,25 @@ public class UserDBEntity {
 	}
 
 	@DynamoDBAttribute
-	public List<Long> getPersonalChats() {
+	public List<String> getPersonalChats() {
 		return personalChats;
 	}
 
-	public void setPersonalChats(List<Long> personalChats) {
+	public void setPersonalChats(List<String> personalChats) {
 		this.personalChats = personalChats;
 	}
 
 	@DynamoDBAttribute
-	public List<Long> getGroups() {
+	public List<String> getGroups() {
 		return groups;
 	}
 
-	public void setGroups(List<Long> groups) {
+	public void setGroups(List<String> groups) {
 		this.groups = groups;
 	}
 
-	public UserDBEntity(Long userId, String userName, String email, String password, String firstName, String lastName,
-			String phone, List<Long> personalChats, List<Long> groups) {
+	public UserDBEntity(String userId, String userName, String email, String password, String firstName, String lastName,
+			String phone, List<String> personalChats, List<String> groups) {
 		super();
 		this.userId = userId;
 		this.userName = userName;

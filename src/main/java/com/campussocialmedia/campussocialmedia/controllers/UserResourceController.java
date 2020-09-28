@@ -30,7 +30,7 @@ public class UserResourceController {
 	}
 
 	@GetMapping("/userConvos/{userId}/{userName}")
-	public HashMap<String, List<Long>> getAllConvoNames(@PathVariable String userId, @PathVariable String userName) {
+	public HashMap<String, List<String>> getAllConvoNames(@PathVariable String userId, @PathVariable String userName) {
 		return service.getAllConvoName(userName);
 	}
 

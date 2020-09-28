@@ -30,7 +30,7 @@ public class UserService {
 	}
 
 	public UserDTO addUser(UserDTO user) {
-		List<Long> emptyList = new ArrayList<Long>();
+		List<String> emptyList = new ArrayList<String>();
 		user.setPersonalChats(emptyList);
 		user.setGroups(emptyList);
 
@@ -50,9 +50,9 @@ public class UserService {
 		return userDTO;
 	}
 
-	public HashMap<String, List<Long>> getAllConvoName(String userName) {
+	public HashMap<String, List<String>> getAllConvoName(String userName) {
 		UserDTO user = getUserByUserName(userName);
-		HashMap<String, List<Long>> convoNames = new HashMap<String, List<Long>>();
+		HashMap<String, List<String>> convoNames = new HashMap<String, List<String>>();
 		convoNames.put("Personal", user.getPersonalChats());
 		convoNames.put("Group", user.getGroups());
 		return convoNames;
