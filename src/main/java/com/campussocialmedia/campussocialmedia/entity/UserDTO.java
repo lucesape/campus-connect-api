@@ -104,6 +104,28 @@ public class UserDTO {
 	public void setGroups(List<String> groups) {
 		this.groups = groups;
 	}
-	
+
+	public UserDTO(String userId, String userName, String email, String password, String firstName, String lastName,
+			String phone, List<String> personalChats, List<String> groups) {
+		this.userId = userId;
+		this.userName = userName;
+		this.email = email;
+		this.password = password;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.phone = phone;
+		this.personalChats = personalChats;
+		this.groups = groups;
+	}
+
+	public UserDTO() {
+	}
+
+	@Override
+	public String toString() {
+		return "UserDTO [email=" + email + ", firstName=" + firstName + ", groups=" + groups + ", lastName=" + lastName
+				+ ", password=" + password + ", personalChats=" + personalChats + ", phone=" + phone + ", userId="
+				+ userId + ", userName=" + userName + "]";
+	}
 
 }
