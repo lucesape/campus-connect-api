@@ -12,7 +12,7 @@ public class CampusSocialMediaApplication {
 		return new ModelMapper();
 	}
 
-	public static void main(String[] args) {
+	public static void main(final String[] args) {
 		SpringApplication.run(CampusSocialMediaApplication.class, args);
 	}
 

@@ -3,6 +3,10 @@ package com.campussocialmedia.campussocialmedia.entity;
 import java.io.Serializable;
 
 public class AuthenticationRequest implements Serializable {
+	/**
+	 *
+	 */
+	private static final long serialVersionUID = 1L;
 	private String userName;
 	private String password;
 
