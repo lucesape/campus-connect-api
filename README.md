@@ -2,27 +2,18 @@
 Backend Repo for campus connect network
 
 ## Start DynamoDB Local Instance
-### 1. Extract dynamodb_local_latest.rar to /somePath
-### 2. Go to /somePath/dynamodb_local_latest
-### 3. Open Command Prompt here
-### 4. Run "java -Djava.library.path=./DynamoDBLocal_lib -jar DynamoDBLocal.jar -sharedDb"
-##### NOTE: If you want different port for dynamoDB use -port XXXX at the end of the previous command
-#### This will start the local instance of DynamoDB at port 8000 (default)
+### 1. Extract dynamodb_local_latest.rar to the root directory of this project
+### 2. Go to /campus-connect-api(or your project name)/dynamodb_local_latest
+### 3. If Windows 10: Run the dbLocalInstance.bat file (double click) and both the localDB instance and GUI will start.
+### The port for Local DB Instance is 8000 and for the GUI is 5000
 
 ## campus-social-media java project
 ### In applications.properties
 #### Port, accesskeys, for dynamoDB etc are specified
 #### Java project will start on port 8080
 
-## For GUI of local DynamoDB
-### 1. Run "npm install dynamodb-admin -g"
-### 2. Run "set DYNAMO_ENDPOINT=https://hidden-beyond-89623.herokuapp.com/" (default in our case)
-### 3. Run "dynamodb-admin"
-#### This will start a server at port:8001. Go to localhost:8001 for the GUI of our database
-
 ## Database Details
 ### The Database has a User Table
 ### Attributes are:
-  #### userId (Number) -> HashKey
-  #### userName (String) -> Range Key
+  #### userName (String) -> Partition key
 ### Other attributes are added in the Java Code
