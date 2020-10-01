@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,14 +26,27 @@ public class UserResourceController {
 	}
 
 	@GetMapping("/user/{userName}")
-	public UserDTO findUser(@PathVariable String userName) {
-		UserDTO user = service.getUserByUserName(userName);
-		return user;
+	public ResponseEntity<?> findUser(@PathVariable String userName) {
+		try {
+			UserDTO user = service.getUserByUserName(userName);
+//			return user;
+			return new ResponseEntity<>(user,HttpStatus.OK);
+		}
+		catch(Exception e) {
+			return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
+		}
 	}
 
-	@GetMapping("/userConvos/{userId}/{userName}")
-	public HashMap<String, List<String>> getAllConvoNames(@PathVariable String userId, @PathVariable String userName) {
-		return service.getAllConvoName(userName);
+	@GetMapping("/userConvos/{userName}")
+	public ResponseEntity<?> getAllConvoNames(@PathVariable String userName) {
+		try {
+			HashMap<String, List<String>> ConvosName = service.getAllConvoName(userName);
+			return new ResponseEntity<>(ConvosName, HttpStatus.OK);
+		}
+		catch(Exception e) {
+			return new ResponseEntity<>("Conversations not found for the user", HttpStatus.NOT_FOUND);
+		}
+		
 	}
 
 //	@DeleteMapping("/deleteUser/{userId}/{userName}")

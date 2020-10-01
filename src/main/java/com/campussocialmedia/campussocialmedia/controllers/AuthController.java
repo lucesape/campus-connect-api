@@ -2,6 +2,7 @@ package com.campussocialmedia.campussocialmedia.controllers;
 
 import java.util.ArrayList;
 
+import org.apache.http.HttpStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 //import org.springframework.security.core.userdetails.User;
 
@@ -60,12 +62,13 @@ public class AuthController {
 					user.getPassword(), new ArrayList<>());
 			final String jwt = jwtTokenUtil.generateToken(userDetails);
 
-			return ResponseEntity.ok(new AuthenticationResponse(jwt));
+			return new ResponseEntity<>(new AuthenticationResponse(jwt), org.springframework.http.HttpStatus.CREATED);
 		} catch (Exception e) {
 			throw new Exception("Some error occurred", e);
 		}
 
-		throw new Exception("User Already exists!");
+//		throw new Exception("User Already exists!");
+		return new ResponseEntity<>("user already exists", org.springframework.http.HttpStatus.CONFLICT );
 	}
 
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
@@ -77,9 +80,11 @@ public class AuthController {
 			authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
 					authenticationRequest.getUsername(), authenticationRequest.getPassword()));
 		} catch (BadCredentialsException e) {
-			throw new Exception("Incorrect password", e);
+			return new ResponseEntity<>("Incorrect Password", org.springframework.http.HttpStatus.UNPROCESSABLE_ENTITY);
+//			throw new Exception("Incorrect password", e);
 		} catch (AuthenticationException e) {
-			throw new Exception("No such user", e);
+			return new ResponseEntity<>("No such user", org.springframework.http.HttpStatus.NOT_FOUND);
+//			throw new Exception("No such user", e);
 		}
 
 		final UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getUsername());
