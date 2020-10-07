@@ -2,10 +2,12 @@ package com.campussocialmedia.campussocialmedia.entity;
 
 import java.io.Serializable;
 
+/*
+Specifies the Authentication response object.
+Currently we need only one field in the Authentication Response object which is the JWT token.
+*/
 public class AuthenticationResponse implements Serializable {
-	/**
-	 *
-	 */
+
 	private static final long serialVersionUID = 1L;
 	private final String jwt;
 
@@ -15,5 +17,5 @@ public class AuthenticationResponse implements Serializable {
 
 	public String getJwt() {
 		return jwt;
-	}
+	} 
 }

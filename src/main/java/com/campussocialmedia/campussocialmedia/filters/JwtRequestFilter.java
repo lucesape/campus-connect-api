@@ -18,6 +18,29 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import com.campussocialmedia.campussocialmedia.service.MyUserDetailsService;
 import com.campussocialmedia.campussocialmedia.util.JwtUtil;
 
+/*
+The request sent to any API endpoint is first intercepted by a Filter.
+There are various types of filters.
+To create own custom filter, we need to create our own filter class and extend it to an existing filter class
+OncePerRequestFilter is used to intercept the incoming request only once.
+
+The job of this class is to intercept the incoming API request, extract the JWT token from the
+Authorization header, and check if the token is valid.
+If the token is valid, this request is passed to the next filter in the chain.
+If this is the last filter in the chain of filters, then the request now will be sent to the actual API
+it was meant for.
+
+IF the authentication fails, 
+*/
+
+/*
+The following exceptions need to be handled:
+If token is absent.
+If token is invalid.
+
+Since doFilterInternal method returns void, we cannot return the ResponseEntity directly from here.
+Throw the above exceptions in this method and handle them seperately in another class.
+*/
 @Component
 public class JwtRequestFilter extends OncePerRequestFilter {
 
@@ -27,6 +50,8 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 	@Autowired
 	private JwtUtil jwtUtil;
 
+	//The doFilterInternal is the method that actually does the filter job.
+	//We override this method and do that custom tasks that we want to do.
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
 			throws ServletException, IOException {
@@ -35,7 +60,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
 		String username = null;
 		String jwt = null;
-
+		
 		if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
 			jwt = authorizationHeader.substring(7);
 			username = jwtUtil.extractUsername(jwt);
@@ -49,11 +74,17 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
 				UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
 						userDetails, null, userDetails.getAuthorities());
-				usernamePasswordAuthenticationToken
-						.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+				
+				usernamePasswordAuthenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+				
 				SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
 			}
 		}
+
+		/*
+		After successful authentication of jwt token, chain.doFilter(req,res) is used to advance 
+		to the next filter in the chain 
+		*/
 		chain.doFilter(request, response);
 	}
 

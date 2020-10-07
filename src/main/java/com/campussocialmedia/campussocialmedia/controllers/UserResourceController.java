@@ -1,5 +1,6 @@
 package com.campussocialmedia.campussocialmedia.controllers;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -13,12 +14,18 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.campussocialmedia.campussocialmedia.entity.UserDTO;
+import com.campussocialmedia.campussocialmedia.exception.ExceptionResponse;
 import com.campussocialmedia.campussocialmedia.service.UserService;
 
 @RestController
 public class UserResourceController {
 	@Autowired
 	private UserService service;
+
+	@GetMapping("/test")
+	public String testApi(){
+		return "This is a test response for testing API";
+	}
 
 	@PostMapping("/user")
 	public UserDTO saveUser(@RequestBody UserDTO user) {
@@ -29,11 +36,16 @@ public class UserResourceController {
 	public ResponseEntity<?> findUser(@PathVariable String userName) {
 		try {
 			UserDTO user = service.getUserByUserName(userName);
-//			return user;
+
 			return new ResponseEntity<>(user,HttpStatus.OK);
 		}
 		catch(Exception e) {
-			return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
+			//return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
+			ExceptionResponse exceptionResponse = new ExceptionResponse(
+             new Date() , "User with username: " + userName + " not found", "Some Details"
+			);
+			
+			return new ResponseEntity<>(exceptionResponse,HttpStatus.NOT_FOUND);
 		}
 	}
 

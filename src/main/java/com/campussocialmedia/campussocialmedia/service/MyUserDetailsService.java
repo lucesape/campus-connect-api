@@ -11,6 +11,13 @@ import org.springframework.stereotype.Service;
 
 import com.campussocialmedia.campussocialmedia.entity.UserDTO;
 
+/*
+class UserDetailsService is used by spring security to get the details of user
+We have to create our own version of UserDetailsService to fetch the user details from our database
+The job of MyUserDetailsService is to return a User object containing username and password of the 
+user whose username is passed or throw UsernameNotFoundException. 
+*/
+
 @Service
 public class MyUserDetailsService implements UserDetailsService {
 
@@ -18,19 +25,20 @@ public class MyUserDetailsService implements UserDetailsService {
 	private UserService service;
 
 	@Override
-	public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
+	public UserDetails loadUserByUsername(String inputUserName) throws UsernameNotFoundException {
 
 		String userName;
 		String password;
 
 		try {
-			UserDTO user = service.getUserByUserName(s);
+			UserDTO user = service.getUserByUserName(inputUserName);
 			userName = user.getUserName();
 			password = user.getPassword();
 		} catch (UsernameNotFoundException e) {
 			throw new UsernameNotFoundException("User not found", e);
 		}
 
+		//Keeping the user authorities blank
 		return new User(userName, password, new ArrayList<>());
 	}
 }

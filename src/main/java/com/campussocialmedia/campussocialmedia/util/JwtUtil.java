@@ -14,6 +14,16 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
+/*
+Utility class for JWT.
+This class contains methods to:
+
+Create a new JWT token with user details
+Validate existing JWT token
+Check if the incoming token has expired
+Extract username from JWT token
+
+*/
 @Service
 public class JwtUtil {
 	private String SECRET_KEY = "secret";
@@ -44,6 +54,7 @@ public class JwtUtil {
 		return createToken(claims, userDetails.getUsername());
 	}
 
+	//If you want to change the expiry duration of tokens, you can do it in this method.
 	private String createToken(Map<String, Object> claims, String subject) {
 
 		return Jwts.builder().setClaims(claims).setSubject(subject).setIssuedAt(new Date(System.currentTimeMillis()))
