@@ -1,6 +1,7 @@
 package com.campussocialmedia.campussocialmedia.controllers;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.http.HttpStatus;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,12 +55,15 @@ public class AuthController {
 		try {
 			System.out.println(authenticationRequest);
 			authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
-					authenticationRequest.getUsername(), authenticationRequest.getPassword()));
-		} catch (AuthenticationException e) { //The user with incoming username does not exist
-			//create the user with passed username
-			UserDTO user = new UserDTO(authenticationRequest.getUsername(), authenticationRequest.getPassword());
-			
-			//Add the user to database
+					authenticationRequest.getUserName(), authenticationRequest.getPassword()));
+		} catch (AuthenticationException e) {
+			// This user does not exist
+			UserDTO user = new UserDTO(authenticationRequest.getUserName(), authenticationRequest.getEmail(), authenticationRequest.getPassword(),
+					authenticationRequest.getYear(), authenticationRequest.getDepartment(), authenticationRequest.getFirstName(), authenticationRequest.getLastName(), authenticationRequest.getPhone(),
+					new ArrayList<String>(), new ArrayList<String>());
+//			String userId, String userName, String email, String password, String year, String department,
+//			String firstName, String lastName, String phone, List<String> personalChats, List<String> groups
+			System.out.println("New user created here:" + user);
 			user = userService.addUser(user);
 
 			//Why is JWT token returned after signup?
@@ -99,14 +103,14 @@ public class AuthController {
 		try {
 			System.out.println(authenticationRequest);
 			authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
-					authenticationRequest.getUsername(), authenticationRequest.getPassword()));
+					authenticationRequest.getUserName(), authenticationRequest.getPassword()));
 		} catch (BadCredentialsException e) {
 			return new ResponseEntity<>("Incorrect Password", org.springframework.http.HttpStatus.UNPROCESSABLE_ENTITY);
 		} catch (AuthenticationException e) {
 			return new ResponseEntity<>("No such user", org.springframework.http.HttpStatus.NOT_FOUND);
 		}
 
-		final UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getUsername());
+		final UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getUserName());
 
 		final String jwt = jwtTokenUtil.generateToken(userDetails);
 

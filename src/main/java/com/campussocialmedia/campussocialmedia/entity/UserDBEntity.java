@@ -12,7 +12,8 @@ public class UserDBEntity {
 	private String userName;
 	private String email;
 	private String password;
-
+	private String year;
+	private String department;
 	private String firstName;
 	private String lastName;
 	private String phone;
@@ -99,14 +100,32 @@ public class UserDBEntity {
 	public void setGroups(List<String> groups) {
 		this.groups = groups;
 	}
+	@DynamoDBAttribute
+	public String getYear() {
+		return year;
+	}
 
-	public UserDBEntity(String userId, String userName, String email, String password, String firstName, String lastName,
-			String phone, List<String> personalChats, List<String> groups) {
+	public void setYear(String year) {
+		this.year = year;
+	}
+	@DynamoDBAttribute
+	public String getDepartment() {
+		return department;
+	}
+
+	public void setDepartment(String department) {
+		this.department = department;
+	}
+
+	public UserDBEntity(String userId, String userName, String email, String password, String year, String department,
+			String firstName, String lastName, String phone, List<String> personalChats, List<String> groups) {
 		super();
 		this.userId = userId;
 		this.userName = userName;
 		this.email = email;
 		this.password = password;
+		this.year = year;
+		this.department = department;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.phone = phone;
@@ -126,9 +145,11 @@ public class UserDBEntity {
 
 	@Override
 	public String toString() {
-		return "User [userId=" + userId + ", userName=" + userName + ", email=" + email + ", password=" + password
-				+ ", firstName=" + firstName + ", lastName=" + lastName + ", phone=" + phone + ", personalChats="
-				+ personalChats + ", groups=" + groups + "]";
+		return "UserDBEntity [userId=" + userId + ", userName=" + userName + ", email=" + email + ", password="
+				+ password + ", year=" + year + ", department=" + department + ", firstName=" + firstName
+				+ ", lastName=" + lastName + ", phone=" + phone + ", personalChats=" + personalChats + ", groups="
+				+ groups + "]";
 	}
 
+	
 }
