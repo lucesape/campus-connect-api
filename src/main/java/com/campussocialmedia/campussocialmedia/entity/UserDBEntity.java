@@ -19,7 +19,9 @@ public class UserDBEntity {
 	private String phone;
 	private List<String> personalChats;
 	private List<String> groups;
-
+	private List<String> followers;
+	private List<String> following;
+	
 	@DynamoDBAttribute
 	public String getUserId() {
 		return userId;
@@ -116,9 +118,30 @@ public class UserDBEntity {
 	public void setDepartment(String department) {
 		this.department = department;
 	}
+	
+	@DynamoDBAttribute
+	public List<String> getFollowers() {
+		return followers;
+	}
+
+	public void setFollowers(List<String> followers) {
+		this.followers = followers;
+	}
+
+	@DynamoDBAttribute
+	public List<String> getFollowing() {
+		return following;
+	}
+
+	public void setFollowing(List<String> following) {
+		this.following = following;
+	}
+
+	
 
 	public UserDBEntity(String userId, String userName, String email, String password, String year, String department,
-			String firstName, String lastName, String phone, List<String> personalChats, List<String> groups) {
+			String firstName, String lastName, String phone, List<String> personalChats, List<String> groups,
+			List<String> followers, List<String> following) {
 		super();
 		this.userId = userId;
 		this.userName = userName;
@@ -131,6 +154,8 @@ public class UserDBEntity {
 		this.phone = phone;
 		this.personalChats = personalChats;
 		this.groups = groups;
+		this.followers = followers;
+		this.following = following;
 	}
 
 	public UserDBEntity() {
@@ -148,8 +173,9 @@ public class UserDBEntity {
 		return "UserDBEntity [userId=" + userId + ", userName=" + userName + ", email=" + email + ", password="
 				+ password + ", year=" + year + ", department=" + department + ", firstName=" + firstName
 				+ ", lastName=" + lastName + ", phone=" + phone + ", personalChats=" + personalChats + ", groups="
-				+ groups + "]";
+				+ groups + ", followers=" + followers + ", following=" + following + "]";
 	}
 
+	
 	
 }

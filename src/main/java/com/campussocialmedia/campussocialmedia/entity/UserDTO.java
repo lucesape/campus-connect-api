@@ -1,5 +1,6 @@
 package com.campussocialmedia.campussocialmedia.entity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import lombok.AllArgsConstructor;
@@ -27,7 +28,9 @@ public class UserDTO {
 	private String phone;
 	private List<String> personalChats;
 	private List<String> groups;
-
+	private List<String> followers;
+	private List<String> following;
+	
 	public UserDTO(String userName, String password) {
 		super();
 		this.userName = userName;
@@ -121,10 +124,29 @@ public class UserDTO {
 	public void setDepartment(String department) {
 		this.department = department;
 	}
+	
 
-	public UserDTO(String userName, String email, String password, String year, String department, String firstName,
-			String lastName, String phone, List<String> personalChats, List<String> groups) {
+	public List<String> getFollowers() {
+		return followers;
+	}
+
+	public void setFollowers(List<String> followers) {
+		this.followers = followers;
+	}
+
+	public List<String> getFollowing() {
+		return following;
+	}
+
+	public void setFollowing(List<String> following) {
+		this.following = following;
+	}
+
+	public UserDTO(String userName, String email, String password, String year, String department,
+			String firstName, String lastName, String phone, List<String> personalChats, List<String> groups,
+			List<String> followers, List<String> following) {
 		super();
+//		this.userId = userId;
 		this.userName = userName;
 		this.email = email;
 		this.password = password;
@@ -135,6 +157,25 @@ public class UserDTO {
 		this.phone = phone;
 		this.personalChats = personalChats;
 		this.groups = groups;
+		this.followers = followers;
+		this.following = following;
+	}
+
+	public UserDTO(String userName, String email, String password, String year, String department, String firstName,
+			String lastName) {
+		super();
+		this.userName = userName;
+		this.email = email;
+		this.password = password;
+		this.year = year;
+		this.department = department;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.phone = "";
+		this.personalChats = new ArrayList<String>();
+		this.groups =  new ArrayList<String>();
+		this.followers =  new ArrayList<String>();
+		this.following =  new ArrayList<String>();
 	}
 
 	public UserDTO() {

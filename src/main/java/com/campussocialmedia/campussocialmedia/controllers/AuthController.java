@@ -59,8 +59,7 @@ public class AuthController {
 		} catch (AuthenticationException e) {
 			// This user does not exist
 			UserDTO user = new UserDTO(authenticationRequest.getUserName(), authenticationRequest.getEmail(), authenticationRequest.getPassword(),
-					authenticationRequest.getYear(), authenticationRequest.getDepartment(), authenticationRequest.getFirstName(), authenticationRequest.getLastName(), authenticationRequest.getPhone(),
-					new ArrayList<String>(), new ArrayList<String>());
+					authenticationRequest.getYear(), authenticationRequest.getDepartment(), authenticationRequest.getFirstName(), authenticationRequest.getLastName());
 //			String userId, String userName, String email, String password, String year, String department,
 //			String firstName, String lastName, String phone, List<String> personalChats, List<String> groups
 			System.out.println("New user created here:" + user);

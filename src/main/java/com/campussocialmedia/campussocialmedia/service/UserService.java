@@ -37,7 +37,23 @@ public class UserService {
 		UserDBEntity userEntity = repository.addUser(convertToEntity(user));
 		return convertToDTO(userEntity);
 	}
-
+	
+	public void addFollowerFollowing(String follower, String following) {
+		UserDBEntity followerEntity = repository.findUserByUserName(follower);
+		UserDBEntity followingEntity = repository.findUserByUserName(following);
+		
+		List<String> followingList = followingEntity.getFollowing();
+		followingList.add(follower);
+		followingEntity.setFollowing(followingList);
+		repository.updateUser(followingEntity);
+//		if not present then only add else throw exception
+		List<String> followersList = followerEntity.getFollowers();
+		followersList.add(following);
+		followerEntity.setFollowers(followersList);
+		repository.updateUser(followerEntity);
+	//  Nothing to return 
+	}
+		
 //	public UserDTO getUserByIdAndUserName(String userId, String userName) {
 //		UserDBEntity userDBEntity = repository.findUserByIdAndUserName(Long.parseLong(userId), userName);
 //		UserDTO userDTO = convertToDTO(userDBEntity);
@@ -57,5 +73,6 @@ public class UserService {
 		convoNames.put("Group", user.getGroups());
 		return convoNames;
 	}
+	
 
 }

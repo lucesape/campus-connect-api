@@ -36,15 +36,16 @@ public class UserRepository {
 		return "User Deleted";
 	}
 
-	public String editPerson(UserDBEntity user) {
+	public String updateUser(UserDBEntity user) {
 		mapper.save(user, buildExpression(user));
+		System.out.print("FOLLOWERS ADDED");
 		return "User Updated";
 	}
 
 	private DynamoDBSaveExpression buildExpression(UserDBEntity user) {
 		DynamoDBSaveExpression dynamoDBSaveExpression = new DynamoDBSaveExpression();
 		Map<String, ExpectedAttributeValue> expectedMap = new HashMap<>();
-		expectedMap.put("userId", new ExpectedAttributeValue(new AttributeValue().withN(user.getUserId().toString())));
+		expectedMap.put("userName", new ExpectedAttributeValue(new AttributeValue().withS(user.getUserName())));
 		dynamoDBSaveExpression.setExpected(expectedMap);
 		return dynamoDBSaveExpression;
 	}

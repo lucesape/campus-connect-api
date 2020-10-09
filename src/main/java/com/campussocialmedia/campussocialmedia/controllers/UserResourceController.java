@@ -3,6 +3,7 @@ package com.campussocialmedia.campussocialmedia.controllers;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -59,6 +60,20 @@ public class UserResourceController {
 			return new ResponseEntity<>("Conversations not found for the user", HttpStatus.NOT_FOUND);
 		}
 		
+	}
+	
+	
+	@PostMapping("/follow")
+	public ResponseEntity<?> addFollowerFollowing(@RequestBody Map<String, String> jsonObject)
+	{
+		try {
+			service.addFollowerFollowing(jsonObject.get("follower"), jsonObject.get("following"));
+			return new ResponseEntity<>("Follower Added", HttpStatus.OK);
+		}
+		catch(Exception e) {
+			return new ResponseEntity<>("Couldn't Follow", HttpStatus.NOT_FOUND);
+		}
+		 
 	}
 
 //	@DeleteMapping("/deleteUser/{userId}/{userName}")
