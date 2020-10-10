@@ -1,5 +1,6 @@
 package com.campussocialmedia.campussocialmedia.controllers;
 
+import java.security.SignatureException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -12,17 +13,22 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.campussocialmedia.campussocialmedia.entity.UserDTO;
 import com.campussocialmedia.campussocialmedia.exception.ExceptionResponse;
 import com.campussocialmedia.campussocialmedia.service.UserService;
+import com.campussocialmedia.campussocialmedia.util.JwtUtil;
 
 @RestController
 public class UserResourceController {
 	@Autowired
 	private UserService service;
 
+	@Autowired
+	private JwtUtil jwtUtil;
+	
 	@GetMapping("/test")
 	public String testApi(){
 		return "This is a test response for testing API";
@@ -64,15 +70,14 @@ public class UserResourceController {
 	
 	
 	@PostMapping("/follow")
-	public ResponseEntity<?> addFollowerFollowing(@RequestBody Map<String, String> jsonObject)
+	public ResponseEntity<?> addFollowerFollowing(@RequestHeader(name="Authorization") String token,@RequestBody Map<String, String> jsonObject) throws SignatureException 
 	{
-		try {
-			service.addFollowerFollowing(jsonObject.get("follower"), jsonObject.get("following"));
+			String jwt = token.substring(7);
+			String userName = jwtUtil.extractUsername(jwt);
+			System.out.print(userName);
+			
+			service.addFollowerFollowing(jsonObject.get("follower"), jsonObject.get("following"), userName);
 			return new ResponseEntity<>("Follower Added", HttpStatus.OK);
-		}
-		catch(Exception e) {
-			return new ResponseEntity<>("Couldn't Follow", HttpStatus.NOT_FOUND);
-		}
 		 
 	}
 

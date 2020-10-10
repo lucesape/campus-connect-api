@@ -1,16 +1,21 @@
 package com.campussocialmedia.campussocialmedia.service;
 
+import java.security.SignatureException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import com.campussocialmedia.campussocialmedia.entity.UserDBEntity;
 import com.campussocialmedia.campussocialmedia.entity.UserDTO;
+import com.campussocialmedia.campussocialmedia.exception.GeneralizedExceptionHandler;
 import com.campussocialmedia.campussocialmedia.repository.UserRepository;
+import com.campussocialmedia.campussocialmedia.util.JwtUtil;
 
 @Service
 public class UserService {
@@ -38,20 +43,31 @@ public class UserService {
 		return convertToDTO(userEntity);
 	}
 	
-	public void addFollowerFollowing(String follower, String following) {
-		UserDBEntity followerEntity = repository.findUserByUserName(follower);
-		UserDBEntity followingEntity = repository.findUserByUserName(following);
+	public void addFollowerFollowing(String follower, String following, String jwtUserName) throws SignatureException {
 		
-		List<String> followingList = followingEntity.getFollowing();
-		followingList.add(follower);
-		followingEntity.setFollowing(followingList);
-		repository.updateUser(followingEntity);
-//		if not present then only add else throw exception
-		List<String> followersList = followerEntity.getFollowers();
-		followersList.add(following);
-		followerEntity.setFollowers(followersList);
-		repository.updateUser(followerEntity);
-	//  Nothing to return 
+			if(!jwtUserName.equals(follower)) 
+				throw new SignatureException("Token does not match with userName");
+			UserDBEntity followerEntity = repository.findUserByUserName(follower);
+			if(followerEntity == null)
+				throw new UsernameNotFoundException("User " + follower + " Not Found");
+			UserDBEntity followingEntity = repository.findUserByUserName(following);
+			if(followingEntity == null)
+				throw new UsernameNotFoundException("User " + following + " Not Found");
+			
+			List<String> followingList = followingEntity.getFollowing();
+			// If user already in following list, No need to add the user in the list
+			if(followingList.contains(follower))
+				return;
+			followingList.add(follower);
+			followingEntity.setFollowing(followingList);
+			repository.updateUser(followingEntity);
+//			if not present then only add else throw exception
+			List<String> followersList = followerEntity.getFollowers();
+			followersList.add(following);
+			followerEntity.setFollowers(followersList);
+			repository.updateUser(followerEntity);
+		//  Nothing to return 
+		
 	}
 		
 //	public UserDTO getUserByIdAndUserName(String userId, String userName) {

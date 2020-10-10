@@ -12,6 +12,7 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.SignatureException;
 
 
 //Used to apply the logic to all controller classes
@@ -40,7 +41,18 @@ public class GeneralizedExceptionHandler extends ResponseEntityExceptionHandler{
 
         return new ResponseEntity<>(exceptionResponse, HttpStatus.NOT_FOUND);
     }
+    
+    @ExceptionHandler(SignatureException.class)
+    public final ResponseEntity<?> handleInValidTokenForUser(SignatureException ex, WebRequest req){
+        //create the exception response object
 
+        ExceptionResponse exceptionResponse = new ExceptionResponse(
+            new Date(), "User with id" + ex.getMessage() + " not found", req.getDescription(false)
+        );
+        System.out.print(exceptionResponse);
+        return new ResponseEntity<>(exceptionResponse, HttpStatus.UNAUTHORIZED);
+    }
+    
     @ExceptionHandler(ExpiredJwtException.class)
     public final ResponseEntity<?> handleExpiredJwtException(ExpiredJwtException ex, WebRequest req){
         //create exception response object
