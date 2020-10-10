@@ -10,6 +10,14 @@ public class AuthenticationResponse implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	private final String jwt;
+	private UserDTO user;
+
+	
+	public AuthenticationResponse(String jwt, UserDTO user) {
+		super();
+		this.jwt = jwt;
+		this.user = user;
+	}
 
 	public AuthenticationResponse(String jwt) {
 		this.jwt = jwt;
@@ -17,5 +25,19 @@ public class AuthenticationResponse implements Serializable {
 
 	public String getJwt() {
 		return jwt;
+	}
+
+	public UserDTO getUser() {
+		return user;
+	}
+
+	public void setUser(UserDTO user) {
+		this.user = user;
+	}
+
+	@Override
+	public String toString() {
+		return "AuthenticationResponse [jwt=" + jwt + ", user=" + user + "]";
 	} 
+	
 }

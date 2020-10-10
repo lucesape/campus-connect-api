@@ -9,6 +9,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -70,7 +71,7 @@ public class AuthController {
 					user.getPassword(), new ArrayList<>());
 			final String jwt = jwtTokenUtil.generateToken(userDetails);
 
-			return new ResponseEntity<>(new AuthenticationResponse(jwt), org.springframework.http.HttpStatus.CREATED);
+			return new ResponseEntity<>(new AuthenticationResponse(jwt,user), org.springframework.http.HttpStatus.CREATED);
 		} catch (Exception e) {
 			throw new Exception("Some error occurred", e);
 		}
@@ -95,9 +96,9 @@ public class AuthController {
 	 * BadCredentialsException and return the appropriate ResponseEntity for the
 	 * same
 	 * 
-	 * If the entire authentication by AuthenticationManager is successfull, then we
+	 * If the entire authentication by AuthenticationManager is successful, then we
 	 * generate the JWT token as per the user details and return the generated JWT
-	 * token as reponse.
+	 * token and user as repsonse.
 	 */
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
 	public ResponseEntity<?> createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest)
@@ -113,11 +114,17 @@ public class AuthController {
 			return new ResponseEntity<>("No such user", org.springframework.http.HttpStatus.NOT_FOUND);
 		}
 
-		final UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getUserName());
+		try {
+			UserDTO user = userService.getUserByUserName(authenticationRequest.getUserName());
+			UserDetails userDetails = new org.springframework.security.core.userdetails.User(user.getUserName(),
+					user.getPassword(), new ArrayList<>());
+			final String jwt = jwtTokenUtil.generateToken(userDetails);
+			return ResponseEntity.ok(new AuthenticationResponse(jwt, user));
+			
+		} catch (UsernameNotFoundException e) {
+			return new ResponseEntity<>("No such user", org.springframework.http.HttpStatus.NOT_FOUND);
+		}
 
-		final String jwt = jwtTokenUtil.generateToken(userDetails);
-
-		return ResponseEntity.ok(new AuthenticationResponse(jwt));
 	}
 
 }

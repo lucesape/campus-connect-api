@@ -23,6 +23,15 @@ public class MyUserDetailsService implements UserDetailsService {
 
 	@Autowired
 	private UserService service;
+	
+	private UserDTO user;
+	
+	public UserDTO getUser() {
+		return user;
+	}
+	public void setUser(UserDTO user) {
+		this.user = user;
+	}
 
 	@Override
 	public UserDetails loadUserByUsername(String inputUserName) throws UsernameNotFoundException {
@@ -31,7 +40,7 @@ public class MyUserDetailsService implements UserDetailsService {
 		String password;
 
 		try {
-			UserDTO user = service.getUserByUserName(inputUserName);
+			user = service.getUserByUserName(inputUserName);
 			userName = user.getUserName();
 			password = user.getPassword();
 		} catch (UsernameNotFoundException e) {
