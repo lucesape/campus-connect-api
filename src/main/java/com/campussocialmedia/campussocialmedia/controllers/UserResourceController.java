@@ -16,7 +16,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.campussocialmedia.campussocialmedia.entity.UserAbout;
 import com.campussocialmedia.campussocialmedia.entity.UserDTO;
+import com.campussocialmedia.campussocialmedia.entity.UserFollowerFollowing;
 import com.campussocialmedia.campussocialmedia.exception.ExceptionResponse;
 import com.campussocialmedia.campussocialmedia.service.UserService;
 import com.campussocialmedia.campussocialmedia.util.JwtUtil;
@@ -43,6 +45,40 @@ public class UserResourceController {
 	public ResponseEntity<?> findUser(@PathVariable String userName) {
 		try {
 			UserDTO user = service.getUserByUserName(userName);
+
+			return new ResponseEntity<>(user,HttpStatus.OK);
+		}
+		catch(Exception e) {
+			//return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
+			ExceptionResponse exceptionResponse = new ExceptionResponse(
+             new Date() , "User with username: " + userName + " not found", "Some Details"
+			);
+			
+			return new ResponseEntity<>(exceptionResponse,HttpStatus.NOT_FOUND);
+		}
+	}
+	
+	@GetMapping("/userAbout/{userName}")
+	public ResponseEntity<?> findUserAbout(@PathVariable String userName) {
+		try {
+			UserAbout user = service.getUserAboutByUserName(userName);
+
+			return new ResponseEntity<>(user,HttpStatus.OK);
+		}
+		catch(Exception e) {
+			//return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
+			ExceptionResponse exceptionResponse = new ExceptionResponse(
+             new Date() , "User with username: " + userName + " not found", "Some Details"
+			);
+			
+			return new ResponseEntity<>(exceptionResponse,HttpStatus.NOT_FOUND);
+		}
+	}
+	
+	@GetMapping("/userFollowerFollowing/{userName}")
+	public ResponseEntity<?> findUserFollowerFollowing(@PathVariable String userName) {
+		try {
+			UserFollowerFollowing user = service.getUserFollowerFollowingByUserName(userName);
 
 			return new ResponseEntity<>(user,HttpStatus.OK);
 		}

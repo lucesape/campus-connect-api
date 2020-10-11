@@ -11,8 +11,10 @@ import org.springframework.stereotype.Service;
 
 import io.jsonwebtoken.SignatureException;
 
+import com.campussocialmedia.campussocialmedia.entity.UserAbout;
 import com.campussocialmedia.campussocialmedia.entity.UserDBEntity;
 import com.campussocialmedia.campussocialmedia.entity.UserDTO;
+import com.campussocialmedia.campussocialmedia.entity.UserFollowerFollowing;
 import com.campussocialmedia.campussocialmedia.repository.UserRepository;
 
 @Service
@@ -31,6 +33,14 @@ public class UserService {
 	private UserDTO convertToDTO(UserDBEntity user) {
 		return modelMapper.map(user, UserDTO.class);
 	}
+	private UserAbout convertToAbout(UserDBEntity user)
+	{
+		return modelMapper.map(user, UserAbout.class);
+	} 
+	private UserFollowerFollowing convertToFollowerFollowing(UserDBEntity user)
+	{
+		return modelMapper.map(user, UserFollowerFollowing.class);
+	} 
 
 	public UserDTO addUser(UserDTO user) {
 		List<String> emptyList = new ArrayList<String>();
@@ -79,6 +89,18 @@ public class UserService {
 		UserDBEntity userDBEntity = repository.findUserByUserName(userName);
 		UserDTO userDTO = convertToDTO(userDBEntity);
 		return userDTO;
+	}
+	
+	public UserAbout getUserAboutByUserName(String userName) {
+		UserDBEntity userDBEntity = repository.findUserByUserName(userName);
+		UserAbout userAbout = convertToAbout(userDBEntity);
+		return userAbout;
+	}
+	
+	public UserFollowerFollowing getUserFollowerFollowingByUserName(String userName) {
+		UserDBEntity userDBEntity = repository.findUserByUserName(userName);
+		UserFollowerFollowing userAbout = convertToFollowerFollowing(userDBEntity);
+		return userAbout;
 	}
 
 	public HashMap<String, List<String>> getAllConvoName(String userName) {
