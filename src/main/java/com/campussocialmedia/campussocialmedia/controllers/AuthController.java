@@ -56,9 +56,10 @@ public class AuthController {
 		} catch (AuthenticationException e) {
 			// This user does not exist
 			UserDTO user = new UserDTO(authenticationRequest.getUserName(), authenticationRequest.getEmail(),
-					authenticationRequest.getPassword(), authenticationRequest.getYear(),
-					authenticationRequest.getDepartment(), authenticationRequest.getFirstName(),
-					authenticationRequest.getLastName());
+					authenticationRequest.getPassword(), authenticationRequest.getFirstName(),
+					authenticationRequest.getLastName(),
+					authenticationRequest.getCollegeDetails()
+					);
 			// String userId, String userName, String email, String password, String year,
 			// String department,
 			// String firstName, String lastName, String phone, List<String> personalChats,

@@ -5,6 +5,7 @@ import java.util.List;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTypeConverted;
 
 @DynamoDBTable(tableName = "UserTable")
 public class UserDBEntity {
@@ -12,8 +13,6 @@ public class UserDBEntity {
 	private String userName;
 	private String email;
 	private String password;
-	private String year;
-	private String department;
 	private String firstName;
 	private String lastName;
 	private String phone;
@@ -21,6 +20,9 @@ public class UserDBEntity {
 	private List<String> groups;
 	private List<String> followers;
 	private List<String> following;
+	private College collegeDetails; 
+	
+
 	
 	@DynamoDBAttribute
 	public String getUserId() {
@@ -102,22 +104,8 @@ public class UserDBEntity {
 	public void setGroups(List<String> groups) {
 		this.groups = groups;
 	}
-	@DynamoDBAttribute
-	public String getYear() {
-		return year;
-	}
-
-	public void setYear(String year) {
-		this.year = year;
-	}
-	@DynamoDBAttribute
-	public String getDepartment() {
-		return department;
-	}
-
-	public void setDepartment(String department) {
-		this.department = department;
-	}
+	
+	
 	
 	@DynamoDBAttribute
 	public List<String> getFollowers() {
@@ -139,24 +127,7 @@ public class UserDBEntity {
 
 	
 
-	public UserDBEntity(String userId, String userName, String email, String password, String year, String department,
-			String firstName, String lastName, String phone, List<String> personalChats, List<String> groups,
-			List<String> followers, List<String> following) {
-		super();
-		this.userId = userId;
-		this.userName = userName;
-		this.email = email;
-		this.password = password;
-		this.year = year;
-		this.department = department;
-		this.firstName = firstName;
-		this.lastName = lastName;
-		this.phone = phone;
-		this.personalChats = personalChats;
-		this.groups = groups;
-		this.followers = followers;
-		this.following = following;
-	}
+	
 
 	public UserDBEntity() {
 		super();
@@ -168,12 +139,38 @@ public class UserDBEntity {
 		this.password = password;
 	}
 
+	@DynamoDBAttribute
+	public College getCollegeDetails() {
+		return collegeDetails;
+	}
+
+	public void setCollegeDetails(College collegeDetails) {
+		this.collegeDetails = collegeDetails;
+	}
+
 	@Override
 	public String toString() {
-		return "UserDBEntity [userId=" + userId + ", userName=" + userName + ", email=" + email + ", password="
-				+ password + ", year=" + year + ", department=" + department + ", firstName=" + firstName
-				+ ", lastName=" + lastName + ", phone=" + phone + ", personalChats=" + personalChats + ", groups="
-				+ groups + ", followers=" + followers + ", following=" + following + "]";
+		return "UserDBEntity [collegeDetails=" + collegeDetails + ", email=" + email + ", firstName=" + firstName
+				+ ", followers=" + followers + ", following=" + following + ", groups=" + groups + ", lastName="
+				+ lastName + ", password=" + password + ", personalChats=" + personalChats + ", phone=" + phone
+				+ ", userId=" + userId + ", userName=" + userName + "]";
+	}
+
+	public UserDBEntity(String userId, String userName, String email, String password, String firstName,
+			String lastName, String phone, List<String> personalChats, List<String> groups, List<String> followers,
+			List<String> following, College collegeDetails) {
+		this.userId = userId;
+		this.userName = userName;
+		this.email = email;
+		this.password = password;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.phone = phone;
+		this.personalChats = personalChats;
+		this.groups = groups;
+		this.followers = followers;
+		this.following = following;
+		this.collegeDetails = collegeDetails;
 	}
 
 	

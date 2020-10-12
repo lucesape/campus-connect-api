@@ -13,8 +13,7 @@ public class AuthenticationRequest implements Serializable {
 	private String email;
 	private String firstName;
 	private String lastName;
-	private String year;
-	private String department;
+	private College collegeDetails;
 	private String phone;
 	// need default constructor for JSON Parsing
 	public AuthenticationRequest() {
@@ -27,18 +26,7 @@ public class AuthenticationRequest implements Serializable {
 	}
 
 	
-	public AuthenticationRequest(String userName, String password, String email, String firstName, String lastName,
-			String year, String department, String phone) {
-		super();
-		this.userName = userName;
-		this.password = password;
-		this.email = email;
-		this.firstName = firstName;
-		this.lastName = lastName;
-		this.year = year;
-		this.department = department;
-		this.phone = phone;
-	}
+	
 
 	public String getUserName() {
 		return userName;
@@ -70,18 +58,7 @@ public class AuthenticationRequest implements Serializable {
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
 	}
-	public String getYear() {
-		return year;
-	}
-	public void setYear(String year) {
-		this.year = year;
-	}
-	public String getDepartment() {
-		return department;
-	}
-	public void setDepartment(String department) {
-		this.department = department;
-	}
+	
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
@@ -94,11 +71,32 @@ public class AuthenticationRequest implements Serializable {
 		this.phone = phone;
 	}
 
+	
+
+	public College getCollegeDetails() {
+		return collegeDetails;
+	}
+
+	public void setCollegeDetails(College collegeDetails) {
+		this.collegeDetails = collegeDetails;
+	}
+
 	@Override
 	public String toString() {
-		return "AuthenticationRequest [userName=" + userName + ", password=" + password + ", email=" + email
-				+ ", firstName=" + firstName + ", lastName=" + lastName + ", year=" + year + ", department="
-				+ department + ", phone=" + phone + "]";
+		return "AuthenticationRequest [collegeDetails=" + collegeDetails + ", email=" + email + ", firstName="
+				+ firstName + ", lastName=" + lastName + ", password=" + password + ", phone=" + phone + ", userName="
+				+ userName + "]";
+	}
+
+	public AuthenticationRequest(String userName, String password, String email, String firstName, String lastName,
+			College collegeDetails, String phone) {
+		this.userName = userName;
+		this.password = password;
+		this.email = email;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.collegeDetails = collegeDetails;
+		this.phone = phone;
 	}
 
 	

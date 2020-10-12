@@ -21,8 +21,6 @@ public class UserDTO {
 	private String userName;
 	private String email;
 	private String password;
-	private String year;
-	private String department;
 	private String firstName;
 	private String lastName;
 	private String phone;
@@ -30,6 +28,7 @@ public class UserDTO {
 	private List<String> groups;
 	private List<String> followers;
 	private List<String> following;
+	private College collegeDetails; 
 	
 	public UserDTO(String userName, String password) {
 		super();
@@ -109,21 +108,8 @@ public class UserDTO {
 		this.groups = groups;
 	}
 	
-	public String getYear() {
-		return year;
-	}
+	
 
-	public void setYear(String year) {
-		this.year = year;
-	}
-
-	public String getDepartment() {
-		return department;
-	}
-
-	public void setDepartment(String department) {
-		this.department = department;
-	}
 	
 
 	public List<String> getFollowers() {
@@ -142,51 +128,37 @@ public class UserDTO {
 		this.following = following;
 	}
 
-	public UserDTO(String userName, String email, String password, String year, String department,
-			String firstName, String lastName, String phone, List<String> personalChats, List<String> groups,
-			List<String> followers, List<String> following) {
-		super();
-//		this.userId = userId;
-		this.userName = userName;
-		this.email = email;
-		this.password = password;
-		this.year = year;
-		this.department = department;
-		this.firstName = firstName;
-		this.lastName = lastName;
-		this.phone = phone;
-		this.personalChats = personalChats;
-		this.groups = groups;
-		this.followers = followers;
-		this.following = following;
-	}
-
-	public UserDTO(String userName, String email, String password, String year, String department, String firstName,
-			String lastName) {
-		super();
-		this.userName = userName;
-		this.email = email;
-		this.password = password;
-		this.year = year;
-		this.department = department;
-		this.firstName = firstName;
-		this.lastName = lastName;
-		this.phone = "";
-		this.personalChats = new ArrayList<String>();
-		this.groups =  new ArrayList<String>();
-		this.followers =  new ArrayList<String>();
-		this.following =  new ArrayList<String>();
-	}
-
 	public UserDTO() {
+	}
+
+	public College getCollegeDetails() {
+		return collegeDetails;
+	}
+
+	public void setCollegeDetails(College collegeDetails) {
+		this.collegeDetails = collegeDetails;
 	}
 
 	@Override
 	public String toString() {
-		return "UserDTO [userName=" + userName + ", email=" + email + ", password=" + password + ", year=" + year
-				+ ", department=" + department + ", firstName=" + firstName + ", lastName=" + lastName + ", phone="
-				+ phone + ", personalChats=" + personalChats + ", groups=" + groups + "]";
+		return "UserDTO [collegeDetails=" + collegeDetails + ", email=" + email + ", firstName=" + firstName
+				+ ", followers=" + followers + ", following=" + following + ", groups=" + groups + ", lastName="
+				+ lastName + ", password=" + password + ", personalChats=" + personalChats + ", phone=" + phone
+				+ ", userName=" + userName + "]";
 	}
+
+	public UserDTO(String userName, String email, String password, String firstName, String lastName,
+			College collegeDetails) {
+		this.userName = userName;
+		this.email = email;
+		this.password = password;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.collegeDetails = collegeDetails;
+	}
+
+	
+	
 
 	
 	
