@@ -10,6 +10,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.bind.annotation.CrossOrigin;
 // import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -30,6 +31,7 @@ import com.campussocialmedia.campussocialmedia.util.JwtUtil;
 This class defines and implements the API endpoints for "/login" & "/signUp"
 */
 @RestController
+@CrossOrigin
 public class AuthController {
 
 	@Autowired
@@ -107,6 +109,7 @@ public class AuthController {
 	 * generate the JWT token as per the user details and return the generated JWT
 	 * token and user as repsonse.
 	 */
+
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
 	public ResponseEntity<?> createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest)
 			throws Exception {
