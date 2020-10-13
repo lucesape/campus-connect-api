@@ -1,12 +1,14 @@
 package com.campussocialmedia.campussocialmedia.filters;
 
 import java.io.IOException;
+import java.util.Date;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.http.HttpStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -15,8 +17,14 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import io.jsonwebtoken.JwtException;
+import io.jsonwebtoken.SignatureException;
+
+import com.campussocialmedia.campussocialmedia.exception.ExceptionResponse;
 import com.campussocialmedia.campussocialmedia.service.MyUserDetailsService;
 import com.campussocialmedia.campussocialmedia.util.JwtUtil;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 /*
 The request sent to any API endpoint is first intercepted by a Filter.
@@ -39,7 +47,7 @@ If token is absent.
 If token is invalid.
 
 Since doFilterInternal method returns void, we cannot return the ResponseEntity directly from here.
-Throw the above exceptions in this method and handle them seperately in another class.
+Throw the above exceptions in this method and handle them separately in another class.
 */
 @Component
 public class JwtRequestFilter extends OncePerRequestFilter {
@@ -50,8 +58,8 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 	@Autowired
 	private JwtUtil jwtUtil;
 
-	//The doFilterInternal is the method that actually does the filter job.
-	//We override this method and do that custom tasks that we want to do.
+	// The doFilterInternal is the method that actually does the filter job.
+	// We override this method and do that custom tasks that we want to do.
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
 			throws ServletException, IOException {
@@ -60,32 +68,70 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
 		String username = null;
 		String jwt = null;
-		
-		if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
-			jwt = authorizationHeader.substring(7);
-			username = jwtUtil.extractUsername(jwt);
-		}
+		System.out.println("HELLO");
+		try {
+			/*
+			 * Check if the token is present in the request header
+			 */
+			if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
+				jwt = authorizationHeader.substring(7);
 
-		if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+				// If the token is invalid in any case, this line will throw SignatureException
+				// which is handled below.
+				username = jwtUtil.extractUsername(jwt);
 
-			UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
-
-			if (jwtUtil.validateToken(jwt, userDetails)) {
-
-				UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
-						userDetails, null, userDetails.getAuthorities());
-				
-				usernamePasswordAuthenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-				
-				SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
+			} else if (!(request.getRequestURI().equals("/login") || request.getRequestURI().equals("/signUp"))) {
+				// System.out.println("Authorization Token is missing");
+				throw new JwtException("Authorization Token is missing");
 			}
-		}
 
-		/*
-		After successful authentication of jwt token, chain.doFilter(req,res) is used to advance 
-		to the next filter in the chain 
-		*/
-		chain.doFilter(request, response);
+			if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+
+				UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
+
+				if (jwtUtil.validateToken(jwt, userDetails)) {
+
+					UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
+							userDetails, null, userDetails.getAuthorities());
+
+					usernamePasswordAuthenticationToken
+							.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+
+					SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
+				}
+			} else {
+				// Throw some Error
+			}
+
+			/*
+			 * After successful authentication of jwt token, chain.doFilter(req,res) is used
+			 * to advance to the next filter in the chain
+			 */
+			chain.doFilter(request, response);
+
+		} catch (SignatureException ex) {
+			ExceptionResponse exceptionResponse = new ExceptionResponse(new Date(), "The token is invalid",
+					request.getRequestURI());
+			response.setStatus(HttpStatus.SC_UNAUTHORIZED);
+			response.setHeader("Content-Type", "application/json");
+			response.getWriter().write(convertObjectToJson(exceptionResponse));
+			return;
+		} catch (Exception ex) {
+			ExceptionResponse exceptionResponse = new ExceptionResponse(new Date(), ex.getMessage(),
+					request.getRequestURI());
+			response.setStatus(HttpStatus.SC_UNAUTHORIZED);
+			response.setHeader("Content-Type", "application/json");
+			response.getWriter().write(convertObjectToJson(exceptionResponse));
+			return;
+		}
+	}
+
+	private String convertObjectToJson(Object object) throws JsonProcessingException {
+		if (object == null) {
+			return null;
+		}
+		ObjectMapper mapper = new ObjectMapper();
+		return mapper.writeValueAsString(object);
 	}
 
 }
