@@ -17,7 +17,7 @@ import lombok.ToString;
 @Getter
 @Setter
 public class UserDTO {
-//	private String userId;
+	// private String userId;
 	private String userName;
 	private String email;
 	private String password;
@@ -28,21 +28,24 @@ public class UserDTO {
 	private List<String> groups;
 	private List<String> followers;
 	private List<String> following;
-	private College collegeDetails; 
-	
+	private College collegeDetails;
+	private PersonalDetails personalDetails;
+	private String bio;
+	private String intro;
+
 	public UserDTO(String userName, String password) {
 		super();
 		this.userName = userName;
 		this.password = password;
 	}
 
-//	public String getUserId() {
-//		return userId;
-//	}
-//
-//	public void setUserId(String userId) {
-//		this.userId = userId;
-//	}
+	// public String getUserId() {
+	// return userId;
+	// }
+	//
+	// public void setUserId(String userId) {
+	// this.userId = userId;
+	// }
 
 	public String getUserName() {
 		return userName;
@@ -107,10 +110,6 @@ public class UserDTO {
 	public void setGroups(List<String> groups) {
 		this.groups = groups;
 	}
-	
-	
-
-	
 
 	public List<String> getFollowers() {
 		return followers;
@@ -139,14 +138,6 @@ public class UserDTO {
 		this.collegeDetails = collegeDetails;
 	}
 
-	@Override
-	public String toString() {
-		return "UserDTO [collegeDetails=" + collegeDetails + ", email=" + email + ", firstName=" + firstName
-				+ ", followers=" + followers + ", following=" + following + ", groups=" + groups + ", lastName="
-				+ lastName + ", password=" + password + ", personalChats=" + personalChats + ", phone=" + phone
-				+ ", userName=" + userName + "]";
-	}
-
 	public UserDTO(String userName, String email, String password, String firstName, String lastName,
 			College collegeDetails) {
 		this.userName = userName;
@@ -157,12 +148,37 @@ public class UserDTO {
 		this.collegeDetails = collegeDetails;
 	}
 
-	
-	
+	public PersonalDetails getPersonalDetails() {
+		return personalDetails;
+	}
 
-	
-	
+	public void setPersonalDetails(PersonalDetails personalDetails) {
+		this.personalDetails = personalDetails;
+	}
 
-	
+	public String getBio() {
+		return bio;
+	}
+
+	public void setBio(String bio) {
+		this.bio = bio;
+	}
+
+	public String getIntro() {
+		return intro;
+	}
+
+	public void setIntro(String intro) {
+		this.intro = intro;
+	}
+
+	@Override
+	public String toString() {
+		return "UserDTO [bio=" + bio + ", collegeDetails=" + collegeDetails + ", email=" + email + ", firstName="
+				+ firstName + ", followers=" + followers + ", following=" + following + ", groups=" + groups
+				+ ", intro=" + intro + ", lastName=" + lastName + ", password=" + password + ", personalChats="
+				+ personalChats + ", personalDetails=" + personalDetails + ", phone=" + phone + ", userName=" + userName
+				+ "]";
+	}
 
 }

@@ -20,10 +20,11 @@ public class UserDBEntity {
 	private List<String> groups;
 	private List<String> followers;
 	private List<String> following;
-	private College collegeDetails; 
-	
+	private College collegeDetails;
+	private PersonalDetails personalDetails;
+	private String bio;
+	private String intro;
 
-	
 	@DynamoDBAttribute
 	public String getUserId() {
 		return userId;
@@ -104,9 +105,7 @@ public class UserDBEntity {
 	public void setGroups(List<String> groups) {
 		this.groups = groups;
 	}
-	
-	
-	
+
 	@DynamoDBAttribute
 	public List<String> getFollowers() {
 		return followers;
@@ -124,10 +123,6 @@ public class UserDBEntity {
 	public void setFollowing(List<String> following) {
 		this.following = following;
 	}
-
-	
-
-	
 
 	public UserDBEntity() {
 		super();
@@ -148,17 +143,9 @@ public class UserDBEntity {
 		this.collegeDetails = collegeDetails;
 	}
 
-	@Override
-	public String toString() {
-		return "UserDBEntity [collegeDetails=" + collegeDetails + ", email=" + email + ", firstName=" + firstName
-				+ ", followers=" + followers + ", following=" + following + ", groups=" + groups + ", lastName="
-				+ lastName + ", password=" + password + ", personalChats=" + personalChats + ", phone=" + phone
-				+ ", userId=" + userId + ", userName=" + userName + "]";
-	}
-
 	public UserDBEntity(String userId, String userName, String email, String password, String firstName,
 			String lastName, String phone, List<String> personalChats, List<String> groups, List<String> followers,
-			List<String> following, College collegeDetails) {
+			List<String> following, College collegeDetails, PersonalDetails personalDetails, String bio, String intro) {
 		this.userId = userId;
 		this.userName = userName;
 		this.email = email;
@@ -171,8 +158,45 @@ public class UserDBEntity {
 		this.followers = followers;
 		this.following = following;
 		this.collegeDetails = collegeDetails;
+		this.personalDetails = personalDetails;
+		this.bio = bio;
+		this.intro = intro;
 	}
 
-	
-	
+	@DynamoDBAttribute
+	public PersonalDetails getPersonalDetails() {
+		return personalDetails;
+	}
+
+	public void setPersonalDetails(PersonalDetails personalDetails) {
+		this.personalDetails = personalDetails;
+	}
+
+	@DynamoDBAttribute
+	public String getBio() {
+		return bio;
+	}
+
+	public void setBio(String bio) {
+		this.bio = bio;
+	}
+
+	@DynamoDBAttribute
+	public String getIntro() {
+		return intro;
+	}
+
+	public void setIntro(String intro) {
+		this.intro = intro;
+	}
+
+	@Override
+	public String toString() {
+		return "UserDBEntity [bio=" + bio + ", collegeDetails=" + collegeDetails + ", email=" + email + ", firstName="
+				+ firstName + ", followers=" + followers + ", following=" + following + ", groups=" + groups
+				+ ", intro=" + intro + ", lastName=" + lastName + ", password=" + password + ", personalChats="
+				+ personalChats + ", personalDetails=" + personalDetails + ", phone=" + phone + ", userId=" + userId
+				+ ", userName=" + userName + "]";
+	}
+
 }
