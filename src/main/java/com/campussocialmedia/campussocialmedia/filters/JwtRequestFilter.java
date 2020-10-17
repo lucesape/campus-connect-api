@@ -68,62 +68,66 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
 		String username = null;
 		String jwt = null;
-		System.out.println("HELLO");
-		try {
-			/*
-			 * Check if the token is present in the request header
-			 */
-			if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
-				jwt = authorizationHeader.substring(7);
-
-				// If the token is invalid in any case, this line will throw SignatureException
-				// which is handled below.
-				username = jwtUtil.extractUsername(jwt);
-
-			} else if (!(request.getRequestURI().equals("/login") || request.getRequestURI().equals("/signUp"))) {
-				// System.out.println("Authorization Token is missing");
-				throw new JwtException("Authorization Token is missing");
-			}
-
-			if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-
-				UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
-
-				if (jwtUtil.validateToken(jwt, userDetails)) {
-
-					UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
-							userDetails, null, userDetails.getAuthorities());
-
-					usernamePasswordAuthenticationToken
-							.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-
-					SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
-				}
-			} else {
-				// Throw some Error
-			}
-
-			/*
-			 * After successful authentication of jwt token, chain.doFilter(req,res) is used
-			 * to advance to the next filter in the chain
-			 */
+		if (request.getRequestURI().equals("/login") || request.getRequestURI().equals("/signUp")) {
 			chain.doFilter(request, response);
+			// return;
+		} else {
+			System.out.println("HELLO");
+			try {
+				/*
+				 * Check if the token is present in the request header
+				 */
+				if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
+					jwt = authorizationHeader.substring(7);
 
-		} catch (SignatureException ex) {
-			ExceptionResponse exceptionResponse = new ExceptionResponse(new Date(), "The token is invalid",
-					request.getRequestURI());
-			response.setStatus(HttpStatus.SC_UNAUTHORIZED);
-			response.setHeader("Content-Type", "application/json");
-			response.getWriter().write(convertObjectToJson(exceptionResponse));
-			return;
-		} catch (Exception ex) {
-			ExceptionResponse exceptionResponse = new ExceptionResponse(new Date(), ex.getMessage(),
-					request.getRequestURI());
-			response.setStatus(HttpStatus.SC_UNAUTHORIZED);
-			response.setHeader("Content-Type", "application/json");
-			response.getWriter().write(convertObjectToJson(exceptionResponse));
-			return;
+					// If the token is invalid in any case, this line will throw SignatureException
+					// which is handled below.
+					username = jwtUtil.extractUsername(jwt);
+
+				}
+
+				if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+
+					UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
+
+					if (jwtUtil.validateToken(jwt, userDetails)) {
+
+						UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
+								userDetails, null, userDetails.getAuthorities());
+
+						usernamePasswordAuthenticationToken
+								.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+
+						SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
+					}
+				} else {
+					// Throw some Error
+				}
+
+				/*
+				 * After successful authentication of jwt token, chain.doFilter(req,res) is used
+				 * to advance to the next filter in the chain
+				 */
+				chain.doFilter(request, response);
+
+			} catch (SignatureException ex) {
+				ExceptionResponse exceptionResponse = new ExceptionResponse(new Date(), "The token is invalid",
+						request.getRequestURI());
+				response.setStatus(HttpStatus.SC_UNAUTHORIZED);
+				response.setHeader("Content-Type", "application/json");
+				response.getWriter().write(convertObjectToJson(exceptionResponse));
+				return;
+			} catch (Exception ex) {
+				ExceptionResponse exceptionResponse = new ExceptionResponse(new Date(), ex.getMessage(),
+						request.getRequestURI());
+				response.setStatus(HttpStatus.SC_UNAUTHORIZED);
+				response.setHeader("Content-Type", "application/json");
+				response.getWriter().write(convertObjectToJson(exceptionResponse));
+				return;
+			}
+
 		}
+
 	}
 
 	private String convertObjectToJson(Object object) throws JsonProcessingException {
