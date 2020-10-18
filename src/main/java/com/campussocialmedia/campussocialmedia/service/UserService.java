@@ -29,6 +29,9 @@ public class UserService {
 	private UserDBEntity convertToEntity(UserDTO user) {
 		return modelMapper.map(user, UserDBEntity.class);
 	}
+	private UserDBEntity convertToEntity(UserAbout user) {
+		return modelMapper.map(user, UserDBEntity.class);
+	}
 
 	private UserDTO convertToDTO(UserDBEntity user) {
 		return modelMapper.map(user, UserDTO.class);
@@ -97,6 +100,13 @@ public class UserService {
 		return userAbout;
 	}
 	
+	public UserAbout updateUserAboutDetails(UserAbout user)
+	{
+		UserDBEntity updatedUser  = convertToEntity(user);
+		updatedUser = repository.updateUserAboutDetails(updatedUser);
+		UserAbout userAbout = convertToAbout(updatedUser);
+		return userAbout ;
+	}
 	public UserFollowerFollowing getUserFollowerFollowingByUserName(String userName) {
 		UserDBEntity userDBEntity = repository.findUserByUserName(userName);
 		UserFollowerFollowing userAbout = convertToFollowerFollowing(userDBEntity);

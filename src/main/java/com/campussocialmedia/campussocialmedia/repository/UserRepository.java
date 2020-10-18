@@ -42,6 +42,13 @@ public class UserRepository {
 		return "User Updated";
 	}
 
+	public UserDBEntity updateUserAboutDetails(UserDBEntity user)
+	{
+		mapper.save(user, buildExpression(user));
+		return mapper.load(UserDBEntity.class, user.getUserName());
+			
+	}
+
 	private DynamoDBSaveExpression buildExpression(UserDBEntity user) {
 		DynamoDBSaveExpression dynamoDBSaveExpression = new DynamoDBSaveExpression();
 		Map<String, ExpectedAttributeValue> expectedMap = new HashMap<>();

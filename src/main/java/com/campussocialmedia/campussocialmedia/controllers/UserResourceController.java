@@ -80,6 +80,21 @@ public class UserResourceController {
 		}
 	}
 
+	// Updated Details of user from "about" section are taken from frontend and updated in database
+	@PostMapping("editUser")
+	public ResponseEntity<?> editUserAboutDetails(@RequestBody UserAbout userObject) {
+		try{
+				UserAbout user = service.updateUserAboutDetails(userObject);
+				return new ResponseEntity<>(user, HttpStatus.OK);
+		}
+		catch (Exception e) {
+			// return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
+			ExceptionResponse exceptionResponse = new ExceptionResponse(new Date(),
+					"User with username: " + userObject.getUserName() + " not found", "Some Details");
+
+			return new ResponseEntity<>(exceptionResponse, HttpStatus.NOT_FOUND);
+		}
+	}
 	@GetMapping("/userFollowerFollowing/{userName}")
 	public ResponseEntity<?> findUserFollowerFollowing(@PathVariable String userName) {
 		try {
