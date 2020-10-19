@@ -9,6 +9,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,16 +25,24 @@ import com.campussocialmedia.campussocialmedia.service.UserService;
 import com.campussocialmedia.campussocialmedia.util.JwtUtil;
 
 @RestController
+@CrossOrigin
 public class UserResourceController {
 	@Autowired
 	private UserService service;
 
 	@Autowired
 	private JwtUtil jwtUtil;
-	
+
 	@GetMapping("/test")
-	public String testApi(){
+	public String testApi() {
 		return "This is a test response for testing API";
+	}
+
+	@GetMapping("/self")
+	public ResponseEntity<?> self(@RequestHeader("Authorization") String token) {
+		String userName = jwtUtil.extractUsername(token.substring(7));
+		UserDTO user = service.getUserByUserName(userName);
+		return new ResponseEntity<>(user, HttpStatus.OK);
 	}
 
 	@PostMapping("/user")
@@ -46,15 +55,13 @@ public class UserResourceController {
 		try {
 			UserDTO user = service.getUserByUserName(userName);
 
-			return new ResponseEntity<>(user,HttpStatus.OK);
-		}
-		catch(Exception e) {
-			//return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
-			ExceptionResponse exceptionResponse = new ExceptionResponse(
-             new Date() , "User with username: " + userName + " not found", "Some Details"
-			);
-			
-			return new ResponseEntity<>(exceptionResponse,HttpStatus.NOT_FOUND);
+			return new ResponseEntity<>(user, HttpStatus.OK);
+		} catch (Exception e) {
+			// return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
+			ExceptionResponse exceptionResponse = new ExceptionResponse(new Date(),
+					"User with username: " + userName + " not found", "Some Details");
+
+			return new ResponseEntity<>(exceptionResponse, HttpStatus.NOT_FOUND);
 		}
 	}
 	
@@ -64,15 +71,29 @@ public class UserResourceController {
 		try {
 			UserAbout user = service.getUserAboutByUserName(userName);
 
-			return new ResponseEntity<>(user,HttpStatus.OK);
+			return new ResponseEntity<>(user, HttpStatus.OK);
+		} catch (Exception e) {
+			// return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
+			ExceptionResponse exceptionResponse = new ExceptionResponse(new Date(),
+					"User with username: " + userName + " not found", "Some Details");
+
+			return new ResponseEntity<>(exceptionResponse, HttpStatus.NOT_FOUND);
 		}
-		catch(Exception e) {
-			//return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
-			ExceptionResponse exceptionResponse = new ExceptionResponse(
-             new Date() , "User with username: " + userName + " not found", "Some Details"
-			);
-			
-			return new ResponseEntity<>(exceptionResponse,HttpStatus.NOT_FOUND);
+	}
+
+	// Updated Details of user from "about" section are taken from frontend and updated in database
+	@PostMapping("editUser")
+	public ResponseEntity<?> editUserAboutDetails(@RequestBody UserAbout userObject) {
+		try{
+				UserAbout user = service.updateUserAboutDetails(userObject);
+				return new ResponseEntity<>(user, HttpStatus.OK);
+		}
+		catch (Exception e) {
+			// return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
+			ExceptionResponse exceptionResponse = new ExceptionResponse(new Date(),
+					"User with username: " + userObject.getUserName() + " not found", "Some Details");
+
+			return new ResponseEntity<>(exceptionResponse, HttpStatus.NOT_FOUND);
 		}
 	}
 	
@@ -81,15 +102,13 @@ public class UserResourceController {
 		try {
 			UserFollowerFollowing user = service.getUserFollowerFollowingByUserName(userName);
 
-			return new ResponseEntity<>(user,HttpStatus.OK);
-		}
-		catch(Exception e) {
-			//return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
-			ExceptionResponse exceptionResponse = new ExceptionResponse(
-             new Date() , "User with username: " + userName + " not found", "Some Details"
-			);
-			
-			return new ResponseEntity<>(exceptionResponse,HttpStatus.NOT_FOUND);
+			return new ResponseEntity<>(user, HttpStatus.OK);
+		} catch (Exception e) {
+			// return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
+			ExceptionResponse exceptionResponse = new ExceptionResponse(new Date(),
+					"User with username: " + userName + " not found", "Some Details");
+
+			return new ResponseEntity<>(exceptionResponse, HttpStatus.NOT_FOUND);
 		}
 	}
 	
@@ -98,11 +117,10 @@ public class UserResourceController {
 		try {
 			HashMap<String, List<Long>> ConvosName = service.getAllConvoName(userName);
 			return new ResponseEntity<>(ConvosName, HttpStatus.OK);
-		}
-		catch(Exception e) {
+		} catch (Exception e) {
 			return new ResponseEntity<>("Conversations not found for the user", HttpStatus.NOT_FOUND);
 		}
-		
+
 	}
 	
 
@@ -111,26 +129,27 @@ public class UserResourceController {
 	//exact username of the user who requested to follow using jwt token
 	//add user2 in following list of user1 and add user1 in follower list of user2
 	@PostMapping("/follow")
-	public ResponseEntity<?> addFollowerFollowing(@RequestHeader(name="Authorization") String token,@RequestBody Map<String, String> jsonObject) throws SignatureException 
-	{
-			String jwt = token.substring(7);
-			String userName = jwtUtil.extractUsername(jwt);
-			System.out.print(userName);
-			
-			service.addFollowerFollowing(jsonObject.get("follower"), jsonObject.get("following"), userName);
-			return new ResponseEntity<>("Follower Added", HttpStatus.OK);
-		 
+	public ResponseEntity<?> addFollowerFollowing(@RequestHeader(name = "Authorization") String token,
+			@RequestBody Map<String, String> jsonObject) throws SignatureException {
+		String jwt = token.substring(7);
+		String userName = jwtUtil.extractUsername(jwt);
+		System.out.print(userName);
+
+		service.addFollowerFollowing(jsonObject.get("follower"), jsonObject.get("following"), userName);
+		return new ResponseEntity<>("Follower Added", HttpStatus.OK);
+
 	}
 
-//	@DeleteMapping("/deleteUser/{userId}/{userName}")
-//	public String deletePerson(@PathVariable String userId, @PathVariable String userName) {
-//		service.deleteUser(userId, userName);
-//		return "User Deleted";
-//	}
+	// @DeleteMapping("/deleteUser/{userId}/{userName}")
+	// public String deletePerson(@PathVariable String userId, @PathVariable String
+	// userName) {
+	// service.deleteUser(userId, userName);
+	// return "User Deleted";
+	// }
 
-//	@PutMapping("/editUser")
-//	public String updatePerson(@RequestBody User user) {
-//		return repository.editPerson(user);
-//	}
+	// @PutMapping("/editUser")
+	// public String updatePerson(@RequestBody User user) {
+	// return repository.editPerson(user);
+	// }
 
 }

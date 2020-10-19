@@ -17,7 +17,7 @@ import lombok.ToString;
 @Getter
 @Setter
 public class UserDTO {
-//	private String userId;
+	// private String userId;
 	private String userName;
 	private String email;
 	private String password;
@@ -26,11 +26,11 @@ public class UserDTO {
 	private String phone;
 	private List<Long> personalChats;
 	private List<Long> groups;
-	private List<Long> followers;
-	private List<Long> following;
 	private List<Experience> experiences;
 	private List<Long> posts;
 	private List<Fishpond> fishponds;
+	private List<String> followers;
+	private List<String> following;
 	private College collegeDetails;
 	private PersonalDetails personalDetails;
 	private String bio;
@@ -80,6 +80,15 @@ public class UserDTO {
 	}
 	
 	
+
+	// public String getUserId() {
+	// return userId;
+	// }
+	//
+	// public void setUserId(String userId) {
+	// this.userId = userId;
+	// }
+
 	public String getUserName() {
 		return userName;
 	}
@@ -135,18 +144,18 @@ public class UserDTO {
 	public void setGroups(List<Long> groups) {
 		this.groups = groups;
 	}
-	
-	public List<Long> getFollowers() {
+
+	public List<String> getFollowers() {
 		return followers;
 	}
-	public void setFollowers(List<Long> followers) {
+	public void setFollowers(List<String> followers) {
 		this.followers = followers;
 	}
 	
-	public List<Long> getFollowing() {
+	public List<String> getFollowing() {
 		return following;
 	}
-	public void setFollowing(List<Long> following) {
+	public void setFollowing(List<String> following) {
 		this.following = following;
 	}
 	

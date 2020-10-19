@@ -238,7 +238,6 @@ public class UserDBEntity {
 	}
 
 
-	
 	@DynamoDBAttribute
 	public String getUserId() {
 		return userId;
@@ -319,9 +318,7 @@ public class UserDBEntity {
 	public void setGroups(List<Long> groups) {
 		this.groups = groups;
 	}
-	
-	
-	
+
 	@DynamoDBAttribute
 	public List<String> getFollowers() {
 		return followers;
@@ -338,6 +335,16 @@ public class UserDBEntity {
 
 	public void setFollowing(List<String> following) {
 		this.following = following;
+	}
+
+	public UserDBEntity() {
+		super();
+	}
+
+	public UserDBEntity(String userName, String password) {
+		super();
+		this.userName = userName;
+		this.password = password;
 	}
 
 	@DynamoDBAttribute

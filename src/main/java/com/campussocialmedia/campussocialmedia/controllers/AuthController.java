@@ -1,15 +1,17 @@
 package com.campussocialmedia.campussocialmedia.controllers;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
+// import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.web.bind.annotation.CrossOrigin;
+// import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,13 +24,16 @@ import com.campussocialmedia.campussocialmedia.entity.AuthenticationResponse;
 import com.campussocialmedia.campussocialmedia.entity.UserDTO;
 import com.campussocialmedia.campussocialmedia.entity.UserDetailsEntity;
 import com.campussocialmedia.campussocialmedia.service.MyUserDetailsService;
+import com.campussocialmedia.campussocialmedia.exception.ExceptionResponse;
+// import com.campussocialmedia.campussocialmedia.service.MyUserDetailsService;
 import com.campussocialmedia.campussocialmedia.service.UserService;
 import com.campussocialmedia.campussocialmedia.util.JwtUtil;
 
 /*
-This class defines and implements the API endpoints for "/login" & "/signup"
+This class defines and implements the API endpoints for "/login" & "/signUp"
 */
 @RestController
+@CrossOrigin
 public class AuthController {
 
 	@Autowired
@@ -37,8 +42,8 @@ public class AuthController {
 	@Autowired
 	private JwtUtil jwtTokenUtil;
 
-	@Autowired
-	private MyUserDetailsService userDetailsService;
+	// @Autowired
+	// private MyUserDetailsService userDetailsService;
 
 	@Autowired
 	private UserService userService;
@@ -49,6 +54,11 @@ public class AuthController {
 	 */
 	@PostMapping(value = "/signUp")
 	public ResponseEntity<?> signUp(@RequestBody AuthenticationRequest authenticationRequest) throws Exception {
+
+		// Try authenticating the given UserName and Password.
+		// If no exception is thrown, then these credentials are already used.
+		// If this UserName does not exists, then continue signUp. It will cause
+		// AuthenticationException for unknown users.
 
 		try {
 			System.out.println(authenticationRequest);
@@ -72,15 +82,14 @@ public class AuthController {
 			UserDetailsEntity userDetailsEntity = new UserDetailsEntity(userDTO.getUserName(),
 					userDTO.getEmail(), userDTO.getFirstName(), userDTO.getLastName(), userDTO.getIntro());
 
-			return new ResponseEntity<>(new AuthenticationResponse(jwt,userDetailsEntity), org.springframework.http.HttpStatus.CREATED);
-		} catch (Exception e) {
-			throw new Exception("Some error occurred", e);
+			return new ResponseEntity<>(new AuthenticationResponse(jwt, userDetailsEntity),
+					org.springframework.http.HttpStatus.CREATED);
 		}
-
 		// If no exception is returned by the AuthenticationManager, then the user with
 		// passed
 		// userName already exists.
-		return new ResponseEntity<>("user already exists", org.springframework.http.HttpStatus.CONFLICT);
+		return new ResponseEntity<>(new ExceptionResponse(new Date(), "User Already Exists", "/signUp"),
+				org.springframework.http.HttpStatus.CONFLICT);
 	}
 
 	/*
@@ -101,19 +110,14 @@ public class AuthController {
 	 * generate the JWT token as per the user details and return the generated JWT
 	 * token and user as repsonse.
 	 */
+
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
 	public ResponseEntity<?> createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest)
 			throws Exception {
 
-		try {
-			System.out.println(authenticationRequest);
-			authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
-					authenticationRequest.getUserName(), authenticationRequest.getPassword()));
-		} catch (BadCredentialsException e) {
-			return new ResponseEntity<>("Incorrect Password", org.springframework.http.HttpStatus.UNPROCESSABLE_ENTITY);
-		} catch (AuthenticationException e) {
-			return new ResponseEntity<>("No such user", org.springframework.http.HttpStatus.NOT_FOUND);
-		}
+		System.out.println(authenticationRequest);
+		authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authenticationRequest.getUserName(),
+				authenticationRequest.getPassword()));
 
 		try {
 			UserDetailsEntity user = userService.getUserBasicDetailsByUserName(authenticationRequest.getUserName());
