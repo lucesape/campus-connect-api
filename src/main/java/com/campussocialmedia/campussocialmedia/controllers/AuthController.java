@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.campussocialmedia.campussocialmedia.entity.AuthenticationRequest;
 import com.campussocialmedia.campussocialmedia.entity.AuthenticationResponse;
 import com.campussocialmedia.campussocialmedia.entity.UserDTO;
+import com.campussocialmedia.campussocialmedia.entity.UserDetailsEntity;
 import com.campussocialmedia.campussocialmedia.service.MyUserDetailsService;
 import com.campussocialmedia.campussocialmedia.service.UserService;
 import com.campussocialmedia.campussocialmedia.util.JwtUtil;
@@ -55,24 +56,23 @@ public class AuthController {
 					authenticationRequest.getUserName(), authenticationRequest.getPassword()));
 		} catch (AuthenticationException e) {
 			// This user does not exist
-			UserDTO user = new UserDTO(authenticationRequest.getUserName(), authenticationRequest.getEmail(),
+			UserDTO userDTO = new UserDTO(authenticationRequest.getUserName(), authenticationRequest.getEmail(),
 					authenticationRequest.getPassword(), authenticationRequest.getFirstName(),
 					authenticationRequest.getLastName(),
 					authenticationRequest.getCollegeDetails()
 					);
-			// String userId, String userName, String email, String password, String year,
-			// String department,
-			// String firstName, String lastName, String phone, List<String> personalChats,
-			// List<String> groups
-			System.out.println("New user created here:" + user);
-			user = userService.addUser(user);
-
+			System.out.println("New user created here:" + userDTO);
+			userDTO = userService.addUser(userDTO);
+			System.out.println("#####");
 			// Why is JWT token returned after signup?
-			UserDetails userDetails = new org.springframework.security.core.userdetails.User(user.getUserName(),
-					user.getPassword(), new ArrayList<>());
+			UserDetails userDetails = new org.springframework.security.core.userdetails.User(userDTO.getUserName(),
+					userDTO.getPassword(), new ArrayList<>());
 			final String jwt = jwtTokenUtil.generateToken(userDetails);
+			
+			UserDetailsEntity userDetailsEntity = new UserDetailsEntity(userDTO.getUserName(),
+					userDTO.getEmail(), userDTO.getFirstName(), userDTO.getLastName(), userDTO.getIntro());
 
-			return new ResponseEntity<>(new AuthenticationResponse(jwt,user), org.springframework.http.HttpStatus.CREATED);
+			return new ResponseEntity<>(new AuthenticationResponse(jwt,userDetailsEntity), org.springframework.http.HttpStatus.CREATED);
 		} catch (Exception e) {
 			throw new Exception("Some error occurred", e);
 		}
@@ -116,9 +116,9 @@ public class AuthController {
 		}
 
 		try {
-			UserDTO user = userService.getUserByUserName(authenticationRequest.getUserName());
-			UserDetails userDetails = new org.springframework.security.core.userdetails.User(user.getUserName(),
-					user.getPassword(), new ArrayList<>());
+			UserDetailsEntity user = userService.getUserBasicDetailsByUserName(authenticationRequest.getUserName());
+			UserDetails userDetails = new org.springframework.security.core.userdetails.User(authenticationRequest.getUserName(),
+					authenticationRequest.getPassword(), new ArrayList<>());
 			final String jwt = jwtTokenUtil.generateToken(userDetails);
 			return ResponseEntity.ok(new AuthenticationResponse(jwt, user));
 			

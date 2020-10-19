@@ -1,76 +1,177 @@
 package com.campussocialmedia.campussocialmedia.entity;
 
+import java.util.HashMap;
 import java.util.List;
 
 public class UserAbout {
+//	private String userId;
 	private String userName;
 	private String email;
-	private String year;
-	private String department;
 	private String firstName;
 	private String lastName;
 	private String phone;
-	public UserAbout(String userName, String email, String year, String department, String firstName, String lastName,
-			String phone) {
+	private List<Long> followers;
+	private List<Long> following;
+	private List<Experience> experiences;
+	private List<Long> posts;
+	private List<Fishpond> fishponds;
+	private College collegeDetails;
+	private PersonalDetails personalDetails;
+	private String bio;
+	private String intro;
+	private HashMap<String, String> socialLinks;
+	
+	public UserAbout() {
+	}
+	public UserAbout(String userName, String password) {
+		super();
+		this.userName = userName;
+	}
+	public UserAbout(String userName, String email, String password, String firstName, String lastName,
+			College collegeDetails) {
 		super();
 		this.userName = userName;
 		this.email = email;
-		this.year = year;
-		this.department = department;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.collegeDetails = collegeDetails;
+	}
+	public UserAbout(String userName, String email, String firstName, String lastName, String phone,
+			List<Long> followers, List<Long> following, List<Experience> experiences, List<Long> posts, 
+			List<Fishpond> fishponds, College collegeDetails, PersonalDetails personalDetails, String bio, 
+			String intro, HashMap<String, String> socialLinks) {
+		super();
+		this.userName = userName;
+		this.email = email;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.phone = phone;
+		this.followers = followers;
+		this.following = following;
+		this.experiences = experiences;
+		this.posts = posts;
+		this.fishponds = fishponds;
+		this.collegeDetails = collegeDetails;
+		this.personalDetails = personalDetails;
+		this.bio = bio;
+		this.intro = intro;
+		this.socialLinks = socialLinks;
 	}
-	public UserAbout() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
+	
+	
 	public String getUserName() {
 		return userName;
 	}
 	public void setUserName(String userName) {
 		this.userName = userName;
 	}
+	
 	public String getEmail() {
 		return email;
 	}
 	public void setEmail(String email) {
 		this.email = email;
 	}
-	public String getYear() {
-		return year;
-	}
-	public void setYear(String year) {
-		this.year = year;
-	}
-	public String getDepartment() {
-		return department;
-	}
-	public void setDepartment(String department) {
-		this.department = department;
-	}
+	
 	public String getFirstName() {
 		return firstName;
 	}
 	public void setFirstName(String firstName) {
 		this.firstName = firstName;
 	}
+	
 	public String getLastName() {
 		return lastName;
 	}
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
 	}
+	
 	public String getPhone() {
 		return phone;
 	}
+	
 	public void setPhone(String phone) {
 		this.phone = phone;
 	}
-	@Override
-	public String toString() {
-		return "UserAbout [userName=" + userName + ", email=" + email + ", year=" + year + ", department=" + department
-				+ ", firstName=" + firstName + ", lastName=" + lastName + ", phone=" + phone + "]";
+	
+	public List<Long> getFollowers() {
+		return followers;
+	}
+	public void setFollowers(List<Long> followers) {
+		this.followers = followers;
 	}
 	
+	public List<Long> getFollowing() {
+		return following;
+	}
+	public void setFollowing(List<Long> following) {
+		this.following = following;
+	}
+	
+	public List<Experience> getExperiences() {
+		return experiences;
+	}
+	public void setExperiences(List<Experience> experiences) {
+		this.experiences = experiences;
+	}
+	
+	public List<Long> getPosts() {
+		return posts;
+	}
+	public void setPosts(List<Long> posts) {
+		this.posts = posts;
+	}
+	
+	public List<Fishpond> getFishponds() {
+		return fishponds;
+	}
+	public void setFishponds(List<Fishpond> fishponds) {
+		this.fishponds = fishponds;
+	}
+	
+	public College getCollegeDetails() {
+		return collegeDetails;
+	}
+	public void setCollegeDetails(College collegeDetails) {
+		this.collegeDetails = collegeDetails;
+	}
+	
+	public PersonalDetails getPersonalDetails() {
+		return personalDetails;
+	}
+	public void setPersonalDetails(PersonalDetails personalDetails) {
+		this.personalDetails = personalDetails;
+	}
+	
+	public String getBio() {
+		return bio;
+	}
+	public void setBio(String bio) {
+		this.bio = bio;
+	}
+	
+	public String getIntro() {
+		return intro;
+	}
+	public void setIntro(String intro) {
+		this.intro = intro;
+	}
+	
+	public HashMap<String, String> getSocialLinks() {
+		return socialLinks;
+	}
+	public void setSocialLinks(HashMap<String, String> socialLinks) {
+		this.socialLinks = socialLinks;
+	}
+	@Override
+	public String toString() {
+		return "UserDTO [userName=" + userName + ", email=" + email + ", firstName=" + firstName + ", lastName="
+				+ lastName + ", phone=" + phone + ", followers=" + followers + ", following=" + following 
+				+ ", experiences=" + experiences + ", posts=" + posts + ", fishponds=" + fishponds 
+				+ ", collegeDetails=" + collegeDetails + ", personalDetails=" + personalDetails + ", bio=" 
+				+ bio + ", intro=" + intro + ", socialLinks=" + socialLinks + "]";
+	}
+	
+
 }

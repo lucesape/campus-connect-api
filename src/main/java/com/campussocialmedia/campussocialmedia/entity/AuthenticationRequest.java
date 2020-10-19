@@ -14,10 +14,20 @@ public class AuthenticationRequest implements Serializable {
 	private String firstName;
 	private String lastName;
 	private College collegeDetails;
-	private String phone;
 	// need default constructor for JSON Parsing
 	public AuthenticationRequest() {
 	}
+	
+	public AuthenticationRequest(String userName, String password, String email, String firstName, String lastName,
+			College collegeDetails) {
+		this.userName = userName;
+		this.password = password;
+		this.email = email;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.collegeDetails = collegeDetails;
+	}
+
 	
 	public AuthenticationRequest(String userName, String password) {
 		super();
@@ -62,17 +72,6 @@ public class AuthenticationRequest implements Serializable {
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
-
-	public String getPhone() {
-		return phone;
-	}
-
-	public void setPhone(String phone) {
-		this.phone = phone;
-	}
-
-	
-
 	public College getCollegeDetails() {
 		return collegeDetails;
 	}
@@ -84,21 +83,10 @@ public class AuthenticationRequest implements Serializable {
 	@Override
 	public String toString() {
 		return "AuthenticationRequest [collegeDetails=" + collegeDetails + ", email=" + email + ", firstName="
-				+ firstName + ", lastName=" + lastName + ", password=" + password + ", phone=" + phone + ", userName="
-				+ userName + "]";
+				+ firstName + ", lastName=" + lastName + ", password=" + password + ", userName=" + userName + "]";
 	}
 
-	public AuthenticationRequest(String userName, String password, String email, String firstName, String lastName,
-			College collegeDetails, String phone) {
-		this.userName = userName;
-		this.password = password;
-		this.email = email;
-		this.firstName = firstName;
-		this.lastName = lastName;
-		this.collegeDetails = collegeDetails;
-		this.phone = phone;
-	}
-
+	
 	
 
 }

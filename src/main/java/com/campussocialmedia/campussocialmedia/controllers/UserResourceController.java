@@ -58,6 +58,7 @@ public class UserResourceController {
 		}
 	}
 	
+	//for searching another user
 	@GetMapping("/userAbout/{userName}")
 	public ResponseEntity<?> findUserAbout(@PathVariable String userName) {
 		try {
@@ -75,7 +76,6 @@ public class UserResourceController {
 		}
 	}
 	
-	
 	@GetMapping("/userFollowerFollowing/{userName}")
 	public ResponseEntity<?> findUserFollowerFollowing(@PathVariable String userName) {
 		try {
@@ -92,11 +92,11 @@ public class UserResourceController {
 			return new ResponseEntity<>(exceptionResponse,HttpStatus.NOT_FOUND);
 		}
 	}
-
+	
 	@GetMapping("/userConvos/{userName}")
 	public ResponseEntity<?> getAllConvoNames(@PathVariable String userName) {
 		try {
-			HashMap<String, List<String>> ConvosName = service.getAllConvoName(userName);
+			HashMap<String, List<Long>> ConvosName = service.getAllConvoName(userName);
 			return new ResponseEntity<>(ConvosName, HttpStatus.OK);
 		}
 		catch(Exception e) {
@@ -105,7 +105,11 @@ public class UserResourceController {
 		
 	}
 	
-	
+
+	//just pass a username(of the person to whom you want to follow) in url as path variable
+	//@GetMapping("/follow/{userName}") => @PostMapping("/follow/{user2}")
+	//exact username of the user who requested to follow using jwt token
+	//add user2 in following list of user1 and add user1 in follower list of user2
 	@PostMapping("/follow")
 	public ResponseEntity<?> addFollowerFollowing(@RequestHeader(name="Authorization") String token,@RequestBody Map<String, String> jsonObject) throws SignatureException 
 	{

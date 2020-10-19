@@ -11,15 +11,21 @@ public class College implements Serializable {
 	private String year;
 	private String branch;
 	private String collegeName;
+	
+	
+	public College() {
+		super();
+	}
+	public College(String year, String branch) {
+		super();
+		this.year = year;
+		this.branch = branch;
+	}
 	public College(String year, String branch, String collegeName) {
 		super();
 		this.year = year;
 		this.branch = branch;
 		this.collegeName = collegeName;
-	}
-	public College() {
-		super();
-		// TODO Auto-generated constructor stub
 	}
 	@DynamoDBAttribute
 	public String getYear() {

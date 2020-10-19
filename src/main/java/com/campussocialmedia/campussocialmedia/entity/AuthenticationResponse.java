@@ -10,10 +10,10 @@ public class AuthenticationResponse implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	private final String jwt;
-	private UserDTO user;
+	private UserDetailsEntity user;
 
 	
-	public AuthenticationResponse(String jwt, UserDTO user) {
+	public AuthenticationResponse(String jwt, UserDetailsEntity user) {
 		super();
 		this.jwt = jwt;
 		this.user = user;
@@ -27,11 +27,11 @@ public class AuthenticationResponse implements Serializable {
 		return jwt;
 	}
 
-	public UserDTO getUser() {
+	public UserDetailsEntity getUser() {
 		return user;
 	}
 
-	public void setUser(UserDTO user) {
+	public void setUser(UserDetailsEntity user) {
 		this.user = user;
 	}
 

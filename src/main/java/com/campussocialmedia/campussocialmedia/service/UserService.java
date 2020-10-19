@@ -14,6 +14,7 @@ import io.jsonwebtoken.SignatureException;
 import com.campussocialmedia.campussocialmedia.entity.UserAbout;
 import com.campussocialmedia.campussocialmedia.entity.UserDBEntity;
 import com.campussocialmedia.campussocialmedia.entity.UserDTO;
+import com.campussocialmedia.campussocialmedia.entity.UserDetailsEntity;
 import com.campussocialmedia.campussocialmedia.entity.UserFollowerFollowing;
 import com.campussocialmedia.campussocialmedia.repository.UserRepository;
 
@@ -33,6 +34,9 @@ public class UserService {
 	private UserDTO convertToDTO(UserDBEntity user) {
 		return modelMapper.map(user, UserDTO.class);
 	}
+	private UserDetailsEntity convertToDetailsEntity(UserDBEntity user) {
+		return modelMapper.map(user, UserDetailsEntity.class);
+	}
 	private UserAbout convertToAbout(UserDBEntity user)
 	{
 		return modelMapper.map(user, UserAbout.class);
@@ -43,7 +47,7 @@ public class UserService {
 	} 
 
 	public UserDTO addUser(UserDTO user) {
-		List<String> emptyList = new ArrayList<String>();
+		List<Long> emptyList = new ArrayList<Long>();
 		user.setPersonalChats(emptyList);
 		user.setGroups(emptyList);
 
@@ -91,6 +95,12 @@ public class UserService {
 		return userDTO;
 	}
 	
+	public UserDetailsEntity getUserBasicDetailsByUserName(String userName) {
+		UserDBEntity userDBEntity = repository.findUserByUserName(userName);
+		UserDetailsEntity userDetailsEntity = convertToDetailsEntity(userDBEntity);
+		return userDetailsEntity;
+	}
+	
 	public UserAbout getUserAboutByUserName(String userName) {
 		UserDBEntity userDBEntity = repository.findUserByUserName(userName);
 		UserAbout userAbout = convertToAbout(userDBEntity);
@@ -103,12 +113,14 @@ public class UserService {
 		return userAbout;
 	}
 
-	public HashMap<String, List<String>> getAllConvoName(String userName) {
+	
+	public HashMap<String, List<Long>> getAllConvoName(String userName) {
 		UserDTO user = getUserByUserName(userName);
-		HashMap<String, List<String>> convoNames = new HashMap<String, List<String>>();
+		HashMap<String, List<Long>> convoNames = new HashMap<String, List<Long>>();
 		convoNames.put("Personal", user.getPersonalChats());
 		convoNames.put("Group", user.getGroups());
 		return convoNames;
 	}
+	
 
 }
