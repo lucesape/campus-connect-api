@@ -22,8 +22,9 @@ public class UserAbout {
 	private HashMap<String, String> socialLinks;
 	
 	public UserAbout() {
+		super();
 	}
-	public UserAbout(String userName, String password) {
+	public UserAbout(String userName) {
 		super();
 		this.userName = userName;
 	}
@@ -35,6 +36,16 @@ public class UserAbout {
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.collegeDetails = collegeDetails;
+	}
+	public UserAbout(String userName, String firstName, String lastName, College collegeDetails,
+			PersonalDetails personalDetails, String bio, String intro) {
+		this.userName = userName;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.collegeDetails = collegeDetails;
+		this.personalDetails = personalDetails;
+		this.bio = bio;
+		this.intro = intro;
 	}
 	public UserAbout(String userName, String email, String firstName, String lastName, String phone,
 			List<Long> followers, List<Long> following, List<Experience> experiences, List<Long> posts, 
@@ -57,23 +68,6 @@ public class UserAbout {
 		this.intro = intro;
 		this.socialLinks = socialLinks;
 	}
-	
-	
-
-	public UserAbout(String userName, String firstName, String lastName, College collegeDetails,
-			PersonalDetails personalDetails, String bio, String intro) {
-		this.userName = userName;
-		this.firstName = firstName;
-		this.lastName = lastName;
-		this.collegeDetails = collegeDetails;
-		this.personalDetails = personalDetails;
-		this.bio = bio;
-		this.intro = intro;
-	}
-
-	public UserAbout() {
-	}
-
 	public String getUserName() {
 		return userName;
 	}
@@ -161,6 +155,7 @@ public class UserAbout {
 				+ ", experiences=" + experiences + ", posts=" + posts + ", fishponds=" + fishponds 
 				+ ", collegeDetails=" + collegeDetails + ", personalDetails=" + personalDetails + ", bio=" 
 				+ bio + ", intro=" + intro + ", socialLinks=" + socialLinks + "]";
+	}
 
 	public College getCollegeDetails() {
 		return collegeDetails;

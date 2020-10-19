@@ -55,7 +55,7 @@ public class UserDTO {
 		this.collegeDetails = collegeDetails;
 	}
 	public UserDTO(String userName, String email, String password, String firstName, String lastName, String phone,
-			List<Long> personalChats, List<Long> groups, List<Long> followers, List<Long> following,
+			List<Long> personalChats, List<Long> groups, List<String> followers, List<String> following,
 			List<Experience> experiences, List<Long> posts, List<Fishpond> fishponds, College collegeDetails,
 			PersonalDetails personalDetails, String bio, String intro, HashMap<String, String> socialLinks) {
 		super();

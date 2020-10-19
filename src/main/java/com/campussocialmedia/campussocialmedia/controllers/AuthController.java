@@ -23,7 +23,6 @@ import com.campussocialmedia.campussocialmedia.entity.AuthenticationRequest;
 import com.campussocialmedia.campussocialmedia.entity.AuthenticationResponse;
 import com.campussocialmedia.campussocialmedia.entity.UserDTO;
 import com.campussocialmedia.campussocialmedia.entity.UserDetailsEntity;
-import com.campussocialmedia.campussocialmedia.service.MyUserDetailsService;
 import com.campussocialmedia.campussocialmedia.exception.ExceptionResponse;
 // import com.campussocialmedia.campussocialmedia.service.MyUserDetailsService;
 import com.campussocialmedia.campussocialmedia.service.UserService;
@@ -65,16 +64,16 @@ public class AuthController {
 			authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
 					authenticationRequest.getUserName(), authenticationRequest.getPassword()));
 		} catch (AuthenticationException e) {
-			// This user does not exist
+			// This user does not exist so user can be created
 			UserDTO userDTO = new UserDTO(authenticationRequest.getUserName(), authenticationRequest.getEmail(),
 					authenticationRequest.getPassword(), authenticationRequest.getFirstName(),
-					authenticationRequest.getLastName(),
-					authenticationRequest.getCollegeDetails()
-					);
-			System.out.println("New user created here:" + userDTO);
+					authenticationRequest.getLastName(),authenticationRequest.getCollegeDetails());
+			//System.out.println("New user created here:" + userDTO);
 			userDTO = userService.addUser(userDTO);
-			System.out.println("#####");
+			//System.out.println("#####");
 			// Why is JWT token returned after signup?
+			// For now. Once we get email verification up and running, we will only return
+			// JTW on login.
 			UserDetails userDetails = new org.springframework.security.core.userdetails.User(userDTO.getUserName(),
 					userDTO.getPassword(), new ArrayList<>());
 			final String jwt = jwtTokenUtil.generateToken(userDetails);
@@ -119,16 +118,11 @@ public class AuthController {
 		authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authenticationRequest.getUserName(),
 				authenticationRequest.getPassword()));
 
-		try {
 			UserDetailsEntity user = userService.getUserBasicDetailsByUserName(authenticationRequest.getUserName());
 			UserDetails userDetails = new org.springframework.security.core.userdetails.User(authenticationRequest.getUserName(),
 					authenticationRequest.getPassword(), new ArrayList<>());
 			final String jwt = jwtTokenUtil.generateToken(userDetails);
 			return ResponseEntity.ok(new AuthenticationResponse(jwt, user));
-			
-		} catch (UsernameNotFoundException e) {
-			return new ResponseEntity<>("No such user", org.springframework.http.HttpStatus.NOT_FOUND);
-		}
 
 	}
 
