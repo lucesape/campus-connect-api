@@ -38,6 +38,7 @@ public class UserResourceController {
 		return "This is a test response for testing API";
 	}
 
+	//to return self user object
 	@GetMapping("/self")
 	public ResponseEntity<?> self(@RequestHeader("Authorization") String token) {
 		String userName = jwtUtil.extractUsername(token.substring(7));
@@ -45,11 +46,18 @@ public class UserResourceController {
 		return new ResponseEntity<>(user, HttpStatus.OK);
 	}
 
+	//no need of this endpoint now, /signup can be used
+	/*
 	@PostMapping("/user")
 	public UserDTO saveUser(@RequestBody UserDTO user) {
 		return service.addUser(user);
 	}
+	*/
 
+	//returns the object of specified username
+	//no need of this endpoint yet
+	//need not return entire userDTO object for security reasons
+	/*
 	@GetMapping("/user/{userName}")
 	public ResponseEntity<?> findUser(@PathVariable String userName) {
 		try {
@@ -64,11 +72,13 @@ public class UserResourceController {
 			return new ResponseEntity<>(exceptionResponse, HttpStatus.NOT_FOUND);
 		}
 	}
+	*/
 	
 	//for searching another user
 	@GetMapping("/userAbout/{userName}")
 	public ResponseEntity<?> findUserAbout(@PathVariable String userName) {
 		try {
+			//userabout contains only the required user details in about section
 			UserAbout user = service.getUserAboutByUserName(userName);
 
 			return new ResponseEntity<>(user, HttpStatus.OK);
@@ -97,6 +107,7 @@ public class UserResourceController {
 		}
 	}
 	
+	//returns a list of both followers and following
 	@GetMapping("/userFollowerFollowing/{userName}")
 	public ResponseEntity<?> findUserFollowerFollowing(@PathVariable String userName) {
 		try {

@@ -23,6 +23,7 @@ public class CollegeDomainNameController {
 	
 	
 	//If a college registers on the platform then add its domain name in database
+	//if domain name is vit.edu, then "@vit.edu" will be added to database
 	@PostMapping("/addDomainName")
 	public ResponseEntity<?> saveDomainName(@RequestBody CollegeDomainNames domainName) {
 		System.out.println("in /addDomainName");
