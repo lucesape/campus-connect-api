@@ -7,13 +7,13 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBDocument;
 
 @DynamoDBDocument
 public class PersonalDetails {
-	private String hometown;
+	private String homeTown;
 	private List<String> talents;
 	private List<String> achievements;
 
-	public PersonalDetails(String hometown, List<String> talents, List<String> achievements) {
+	public PersonalDetails(String homeTown, List<String> talents, List<String> achievements) {
 		super();
-		this.hometown = hometown;
+		this.homeTown = homeTown;
 		this.talents = talents;
 		this.achievements = achievements;
 	}
@@ -25,17 +25,17 @@ public class PersonalDetails {
 
 	@Override
 	public String toString() {
-		return "PersonalDetails [hometown=" + hometown + ", talents=" + talents + ", achievements=" + achievements
+		return "PersonalDetails [homeTown=" + homeTown + ", talents=" + talents + ", achievements=" + achievements
 				+ "]";
 	}
 
 	@DynamoDBAttribute
-	public String getHometown() {
-		return hometown;
+	public String getHomeTown() {
+		return homeTown;
 	}
 
-	public void setHometown(String hometown) {
-		this.hometown = hometown;
+	public void setHomeTown(String homeTown) {
+		this.homeTown = homeTown;
 	}
 
 	@DynamoDBAttribute

@@ -38,7 +38,7 @@ public class UserResourceController {
 		return "This is a test response for testing API";
 	}
 
-	//to return self user object
+	// to return self user object
 	@GetMapping("/self")
 	public ResponseEntity<?> self(@RequestHeader("Authorization") String token) {
 		String userName = jwtUtil.extractUsername(token.substring(7));
@@ -46,39 +46,33 @@ public class UserResourceController {
 		return new ResponseEntity<>(user, HttpStatus.OK);
 	}
 
-	//no need of this endpoint now, /signup can be used
+	// no need of this endpoint now, /signup can be used
 	/*
-	@PostMapping("/user")
-	public UserDTO saveUser(@RequestBody UserDTO user) {
-		return service.addUser(user);
-	}
-	*/
+	 * @PostMapping("/user") public UserDTO saveUser(@RequestBody UserDTO user) {
+	 * return service.addUser(user); }
+	 */
 
-	//returns the object of specified username
-	//no need of this endpoint yet
-	//need not return entire userDTO object for security reasons
+	// returns the object of specified username
+	// no need of this endpoint yet
+	// need not return entire userDTO object for security reasons
 	/*
-	@GetMapping("/user/{userName}")
-	public ResponseEntity<?> findUser(@PathVariable String userName) {
-		try {
-			UserDTO user = service.getUserByUserName(userName);
+	 * @GetMapping("/user/{userName}") public ResponseEntity<?>
+	 * findUser(@PathVariable String userName) { try { UserDTO user =
+	 * service.getUserByUserName(userName);
+	 * 
+	 * return new ResponseEntity<>(user, HttpStatus.OK); } catch (Exception e) { //
+	 * return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
+	 * ExceptionResponse exceptionResponse = new ExceptionResponse(new Date(),
+	 * "User with username: " + userName + " not found", "Some Details");
+	 * 
+	 * return new ResponseEntity<>(exceptionResponse, HttpStatus.NOT_FOUND); } }
+	 */
 
-			return new ResponseEntity<>(user, HttpStatus.OK);
-		} catch (Exception e) {
-			// return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
-			ExceptionResponse exceptionResponse = new ExceptionResponse(new Date(),
-					"User with username: " + userName + " not found", "Some Details");
-
-			return new ResponseEntity<>(exceptionResponse, HttpStatus.NOT_FOUND);
-		}
-	}
-	*/
-	
-	//for searching another user
+	// for searching another user
 	@GetMapping("/userAbout/{userName}")
 	public ResponseEntity<?> findUserAbout(@PathVariable String userName) {
 		try {
-			//userabout contains only the required user details in about section
+			// userabout contains only the required user details in about section
 			UserAbout user = service.getUserAboutByUserName(userName);
 
 			return new ResponseEntity<>(user, HttpStatus.OK);
@@ -91,23 +85,26 @@ public class UserResourceController {
 		}
 	}
 
-	// Updated Details of user from "about" section are taken from frontend and updated in database
-	@PostMapping("editUser")
-	public ResponseEntity<?> editUserAboutDetails(@RequestBody UserAbout userObject) {
-		try{
-				UserAbout user = service.updateUserAboutDetails(userObject);
-				return new ResponseEntity<>(user, HttpStatus.OK);
-		}
-		catch (Exception e) {
+	// Updated Details of user from "about" section are taken from frontend and
+	// updated in database
+	// Only the status is returned since it is all the frontEnd needs.
+	@PostMapping("/editUser")
+	public ResponseEntity<?> editUserAboutDetails(@RequestBody UserAbout userAboutObject) {
+		try {
+			System.out.println(userAboutObject);
+
+			service.updateUserAboutDetails(userAboutObject);
+			return new ResponseEntity<>(HttpStatus.OK);
+		} catch (Exception e) {
 			// return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
 			ExceptionResponse exceptionResponse = new ExceptionResponse(new Date(),
-					"User with username: " + userObject.getUserName() + " not found", "Some Details");
+					"User with username: " + userAboutObject.getUserName() + " not found", "Some Details");
 
 			return new ResponseEntity<>(exceptionResponse, HttpStatus.NOT_FOUND);
 		}
 	}
-	
-	//returns a list of both followers and following
+
+	// returns a list of both followers and following
 	@GetMapping("/userFollowerFollowing/{userName}")
 	public ResponseEntity<?> findUserFollowerFollowing(@PathVariable String userName) {
 		try {
@@ -122,7 +119,7 @@ public class UserResourceController {
 			return new ResponseEntity<>(exceptionResponse, HttpStatus.NOT_FOUND);
 		}
 	}
-	
+
 	@GetMapping("/userConvos/{userName}")
 	public ResponseEntity<?> getAllConvoNames(@PathVariable String userName) {
 		try {
@@ -133,12 +130,12 @@ public class UserResourceController {
 		}
 
 	}
-	
 
-	//just pass a username(of the person to whom you want to follow) in url as path variable
-	//@GetMapping("/follow/{userName}") => @PostMapping("/follow/{user2}")
-	//exact username of the user who requested to follow using jwt token
-	//add user2 in following list of user1 and add user1 in follower list of user2
+	// just pass a username(of the person to whom you want to follow) in url as path
+	// variable
+	// @GetMapping("/follow/{userName}") => @PostMapping("/follow/{user2}")
+	// exact username of the user who requested to follow using jwt token
+	// add user2 in following list of user1 and add user1 in follower list of user2
 	@PostMapping("/follow")
 	public ResponseEntity<?> addFollowerFollowing(@RequestHeader(name = "Authorization") String token,
 			@RequestBody Map<String, String> jsonObject) throws SignatureException {

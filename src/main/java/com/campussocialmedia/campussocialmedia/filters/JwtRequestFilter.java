@@ -72,7 +72,6 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 			chain.doFilter(request, response);
 			// return;
 		} else {
-			System.out.println("HELLO");
 			try {
 				/*
 				 * Check if the token is present in the request header

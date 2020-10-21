@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import io.jsonwebtoken.SignatureException;
 
+import com.campussocialmedia.campussocialmedia.entity.PersonalDetails;
 import com.campussocialmedia.campussocialmedia.entity.UserAbout;
 import com.campussocialmedia.campussocialmedia.entity.UserDBEntity;
 import com.campussocialmedia.campussocialmedia.entity.UserDTO;
@@ -30,29 +31,54 @@ public class UserService {
 	private UserDBEntity convertToEntity(UserDTO user) {
 		return modelMapper.map(user, UserDBEntity.class);
 	}
-	private UserDBEntity convertToEntity(UserAbout user) {
-		return modelMapper.map(user, UserDBEntity.class);
+
+	/*
+	 * A complete UserAbout object is sent from frontend. If we directly use mapper
+	 * to covert to DBEntity, the rest of the data will be set to null (like
+	 * password, posts, followers, etc) Currently, manually setting the rest of the
+	 * data (which is in DBEntity but not in UserAbout) IS THERE A BETTER WAY TO DO
+	 * THIS?
+	 */
+	private UserDBEntity convertToEntity(UserAbout user, UserDBEntity originalObject) {
+		UserDBEntity temp = modelMapper.map(user, UserDBEntity.class);
+		temp.setPassword(originalObject.getPassword());
+		temp.setPosts(originalObject.getPosts());
+		temp.setGroups(originalObject.getGroups());
+		temp.setPersonalChats(originalObject.getPersonalChats());
+		temp.setFollowers(originalObject.getFollowers());
+		temp.setFollowing(originalObject.getFollowing());
+		return temp;
 	}
 
 	private UserDTO convertToDTO(UserDBEntity user) {
 		return modelMapper.map(user, UserDTO.class);
 	}
+
 	private UserDetailsEntity convertToDetailsEntity(UserDBEntity user) {
 		return modelMapper.map(user, UserDetailsEntity.class);
 	}
-	private UserAbout convertToAbout(UserDBEntity user)
-	{
+
+	private UserAbout convertToAbout(UserDBEntity user) {
 		return modelMapper.map(user, UserAbout.class);
-	} 
-	private UserFollowerFollowing convertToFollowerFollowing(UserDBEntity user)
-	{
+	}
+
+	private UserFollowerFollowing convertToFollowerFollowing(UserDBEntity user) {
 		return modelMapper.map(user, UserFollowerFollowing.class);
-	} 
+	}
 
 	public UserDTO addUser(UserDTO user) {
 		List<Long> emptyList = new ArrayList<Long>();
 		user.setPersonalChats(emptyList);
 		user.setGroups(emptyList);
+		PersonalDetails details = new PersonalDetails("-", new ArrayList<String>(), new ArrayList<String>());
+		user.setPersonalDetails(details);
+		user.setFollowers(new ArrayList<String>());
+		user.setFollowing(new ArrayList<String>());
+		user.setBio("-");
+		user.setIntro("-");
+		user.setPosts(new ArrayList<>());
+
+		System.out.println(user);
 
 		UserDBEntity userEntity = repository.addUser(convertToEntity(user));
 		return convertToDTO(userEntity);
@@ -97,33 +123,33 @@ public class UserService {
 		UserDTO userDTO = convertToDTO(userDBEntity);
 		return userDTO;
 	}
-	
+
 	public UserDetailsEntity getUserBasicDetailsByUserName(String userName) {
 		UserDBEntity userDBEntity = repository.findUserByUserName(userName);
 		UserDetailsEntity userDetailsEntity = convertToDetailsEntity(userDBEntity);
 		return userDetailsEntity;
 	}
-	
+
 	public UserAbout getUserAboutByUserName(String userName) {
 		UserDBEntity userDBEntity = repository.findUserByUserName(userName);
 		UserAbout userAbout = convertToAbout(userDBEntity);
 		return userAbout;
 	}
-	
-	public UserAbout updateUserAboutDetails(UserAbout user)
-	{
-		UserDBEntity updatedUser  = convertToEntity(user);
+
+	// The frontend doesn't need any thing apart from confirmation.
+	public void updateUserAboutDetails(UserAbout user) {
+		UserDBEntity originalUser = repository.findUserByUserName(user.getUserName());
+		UserDBEntity updatedUser = convertToEntity(user, originalUser);
+		System.out.println(updatedUser);
 		updatedUser = repository.updateUserAboutDetails(updatedUser);
-		UserAbout userAbout = convertToAbout(updatedUser);
-		return userAbout ;
 	}
+
 	public UserFollowerFollowing getUserFollowerFollowingByUserName(String userName) {
 		UserDBEntity userDBEntity = repository.findUserByUserName(userName);
 		UserFollowerFollowing userAbout = convertToFollowerFollowing(userDBEntity);
 		return userAbout;
 	}
 
-	
 	public HashMap<String, List<Long>> getAllConvoName(String userName) {
 		UserDTO user = getUserByUserName(userName);
 		HashMap<String, List<Long>> convoNames = new HashMap<String, List<Long>>();
@@ -131,6 +157,5 @@ public class UserService {
 		convoNames.put("Group", user.getGroups());
 		return convoNames;
 	}
-	
 
 }
