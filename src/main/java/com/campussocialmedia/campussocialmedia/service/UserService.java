@@ -158,4 +158,10 @@ public class UserService {
 		return convoNames;
 	}
 
+	public void addProfilePhotoURL(String userName, String url) {
+		UserDBEntity user = repository.findUserByUserName(userName);
+		user.setProfilePhotoURL(url);
+		repository.updateUser(user);
+	}
+
 }

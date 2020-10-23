@@ -15,12 +15,16 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.amazonaws.Response;
 import com.campussocialmedia.campussocialmedia.entity.UserAbout;
 import com.campussocialmedia.campussocialmedia.entity.UserDTO;
 import com.campussocialmedia.campussocialmedia.entity.UserFollowerFollowing;
 import com.campussocialmedia.campussocialmedia.exception.ExceptionResponse;
+import com.campussocialmedia.campussocialmedia.service.AmazonClient;
 import com.campussocialmedia.campussocialmedia.service.UserService;
 import com.campussocialmedia.campussocialmedia.util.JwtUtil;
 
@@ -29,6 +33,9 @@ import com.campussocialmedia.campussocialmedia.util.JwtUtil;
 public class UserResourceController {
 	@Autowired
 	private UserService service;
+
+	@Autowired
+	private AmazonClient amazonClient;
 
 	@Autowired
 	private JwtUtil jwtUtil;
@@ -155,9 +162,12 @@ public class UserResourceController {
 	// return "User Deleted";
 	// }
 
-	// @PutMapping("/editUser")
-	// public String updatePerson(@RequestBody User user) {
-	// return repository.editPerson(user);
-	// }
+	@PostMapping("/uploadProfilePhoto")
+	public ResponseEntity<?> uploadProfilePhoto(@RequestPart(value = "file") MultipartFile file,
+			@RequestPart(value = "userName") String userName) {
+		String fileURL = amazonClient.uploadFile(file);
+		service.addProfilePhotoURL(userName, fileURL);
+		return new ResponseEntity<>(fileURL, HttpStatus.OK);
+	}
 
 }
