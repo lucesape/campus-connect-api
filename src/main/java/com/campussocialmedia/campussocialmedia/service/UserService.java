@@ -137,7 +137,11 @@ public class UserService {
 	}
 
 	// The frontend doesn't need any thing apart from confirmation.
-	public void updateUserAboutDetails(UserAbout user) {
+	public void updateUserAboutDetails(UserAbout user, String userName) {
+		if(!userName.equals(user.getUserName()))
+		{
+			throw new SignatureException("Unauthorized User");
+		}
 		UserDBEntity originalUser = repository.findUserByUserName(user.getUserName());
 		UserDBEntity updatedUser = convertToEntity(user, originalUser);
 		System.out.println(updatedUser);

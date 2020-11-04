@@ -1,6 +1,6 @@
 package com.campussocialmedia.campussocialmedia.controllers;
 
-import java.security.SignatureException;
+import io.jsonwebtoken.SignatureException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -96,19 +96,14 @@ public class UserResourceController {
 	// updated in database
 	// Only the status is returned since it is all the frontEnd needs.
 	@PostMapping("/editUser")
-	public ResponseEntity<?> editUserAboutDetails(@RequestBody UserAbout userAboutObject) {
-		try {
+	public ResponseEntity<?> editUserAboutDetails(@RequestBody UserAbout userAboutObject, @RequestHeader(name = "Authorization") String token) throws SignatureException {
 			System.out.println(userAboutObject);
+			String jwt = token.substring(7);
+			String userName = jwtUtil.extractUsername(jwt);
 
-			service.updateUserAboutDetails(userAboutObject);
+			service.updateUserAboutDetails(userAboutObject, userName);
 			return new ResponseEntity<>(HttpStatus.OK);
-		} catch (Exception e) {
-			// return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
-			ExceptionResponse exceptionResponse = new ExceptionResponse(new Date(),
-					"User with username: " + userAboutObject.getUserName() + " not found", "Some Details");
-
-			return new ResponseEntity<>(exceptionResponse, HttpStatus.NOT_FOUND);
-		}
+		
 	}
 
 	// returns a list of both followers and following

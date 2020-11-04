@@ -66,7 +66,7 @@ public class GeneralizedExceptionHandler extends ResponseEntityExceptionHandler 
     public final ResponseEntity<?> handleInValidTokenForUser(SignatureException ex, WebRequest req) {
         // create the exception response object
 
-        ExceptionResponse exceptionResponse = new ExceptionResponse(new Date(), "Token is invalid",
+        ExceptionResponse exceptionResponse = new ExceptionResponse(new Date(), "Unauthorised User",
                 req.getDescription(false));
         System.out.print(exceptionResponse);
         return new ResponseEntity<>(exceptionResponse, HttpStatus.UNAUTHORIZED);
