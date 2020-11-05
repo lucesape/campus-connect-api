@@ -86,6 +86,8 @@ public class UserService {
 
 	public void addFollowerFollowing(String follower, String following, String jwtUserName) {
 
+		System.out.println(follower + ", " + following);
+
 		if (!jwtUserName.equals(follower))
 			throw new SignatureException("Token does not match with userName");
 		UserDBEntity followerEntity = repository.findUserByUserName(follower);
@@ -95,17 +97,17 @@ public class UserService {
 		if (followingEntity == null)
 			throw new UsernameNotFoundException("User " + following + " Not Found");
 
-		List<String> followingList = followingEntity.getFollowing();
+		List<String> followersList = followingEntity.getFollowers();
 		// If user already in following list, No need to add the user in the list
-		if (followingList.contains(follower))
+		if (followersList.contains(follower))
 			return;
-		followingList.add(follower);
-		followingEntity.setFollowing(followingList);
+		followersList.add(follower);
+		followingEntity.setFollowers(followersList);
 		repository.updateUser(followingEntity);
 		// if not present then only add else throw exception
-		List<String> followersList = followerEntity.getFollowers();
-		followersList.add(following);
-		followerEntity.setFollowers(followersList);
+		List<String> followingList = followerEntity.getFollowing();
+		followingList.add(following);
+		followerEntity.setFollowing(followingList);
 		repository.updateUser(followerEntity);
 		// Nothing to return
 
@@ -138,8 +140,7 @@ public class UserService {
 
 	// The frontend doesn't need any thing apart from confirmation.
 	public void updateUserAboutDetails(UserAbout user, String userName) {
-		if(!userName.equals(user.getUserName()))
-		{
+		if (!userName.equals(user.getUserName())) {
 			throw new SignatureException("Unauthorized User");
 		}
 		UserDBEntity originalUser = repository.findUserByUserName(user.getUserName());

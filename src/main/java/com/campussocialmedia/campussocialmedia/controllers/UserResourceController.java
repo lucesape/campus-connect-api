@@ -99,7 +99,6 @@ public class UserResourceController {
 	@PostMapping("/editUser")
 	public ResponseEntity<?> editUserAboutDetails(@RequestBody UserAbout userAboutObject,
 			@RequestHeader(name = "Authorization") String token) throws SignatureException {
-		System.out.println(userAboutObject);
 		String jwt = token.substring(7);
 		String userName = jwtUtil.extractUsername(jwt);
 
@@ -145,7 +144,6 @@ public class UserResourceController {
 			@RequestBody Map<String, String> jsonObject) throws SignatureException {
 		String jwt = token.substring(7);
 		String userName = jwtUtil.extractUsername(jwt);
-		System.out.print(userName);
 
 		service.addFollowerFollowing(jsonObject.get("follower"), jsonObject.get("following"), userName);
 		return new ResponseEntity<>("Follower Added", HttpStatus.OK);
