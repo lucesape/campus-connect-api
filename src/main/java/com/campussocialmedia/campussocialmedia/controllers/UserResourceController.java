@@ -24,7 +24,7 @@ import com.campussocialmedia.campussocialmedia.entity.UserAbout;
 import com.campussocialmedia.campussocialmedia.entity.UserDTO;
 import com.campussocialmedia.campussocialmedia.entity.UserFollowerFollowing;
 import com.campussocialmedia.campussocialmedia.exception.ExceptionResponse;
-import com.campussocialmedia.campussocialmedia.service.AmazonClient;
+import com.campussocialmedia.campussocialmedia.service.MediaService;
 import com.campussocialmedia.campussocialmedia.service.UserService;
 import com.campussocialmedia.campussocialmedia.util.JwtUtil;
 
@@ -35,7 +35,7 @@ public class UserResourceController {
 	private UserService service;
 
 	@Autowired
-	private AmazonClient amazonClient;
+	private MediaService amazonClient;
 
 	@Autowired
 	private JwtUtil jwtUtil;

@@ -1,6 +1,6 @@
 package com.campussocialmedia.campussocialmedia.controllers;
 
-import com.campussocialmedia.campussocialmedia.service.AmazonClient;
+import com.campussocialmedia.campussocialmedia.service.MediaService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -15,16 +15,16 @@ import org.springframework.web.multipart.MultipartFile;
 public class MediaController {
 
     @Autowired
-    private AmazonClient amazonClient;
+    private MediaService mediaService;
 
     @PostMapping("/uploadFile")
     public String uploadFile(@RequestPart(value = "file") MultipartFile file) {
-        return this.amazonClient.uploadFile(file);
+        return this.mediaService.uploadFile(file);
     }
 
     @DeleteMapping("/deleteFile")
     public String deleteFile(@RequestPart(value = "url") String fileUrl) {
-        return this.amazonClient.deleteFileFromS3Bucket(fileUrl);
+        return this.mediaService.deleteFileFromS3Bucket(fileUrl);
     }
 
 }
