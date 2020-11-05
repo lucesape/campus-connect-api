@@ -49,7 +49,8 @@ public class UserResourceController {
 	@GetMapping("/self")
 	public ResponseEntity<?> self(@RequestHeader("Authorization") String token) {
 		String userName = jwtUtil.extractUsername(token.substring(7));
-		UserDTO user = service.getUserByUserName(userName);
+		// UserDTO user = service.getUserByUserName(userName);
+		UserAbout user = service.getUserAboutByUserName(userName);
 		return new ResponseEntity<>(user, HttpStatus.OK);
 	}
 
@@ -96,14 +97,15 @@ public class UserResourceController {
 	// updated in database
 	// Only the status is returned since it is all the frontEnd needs.
 	@PostMapping("/editUser")
-	public ResponseEntity<?> editUserAboutDetails(@RequestBody UserAbout userAboutObject, @RequestHeader(name = "Authorization") String token) throws SignatureException {
-			System.out.println(userAboutObject);
-			String jwt = token.substring(7);
-			String userName = jwtUtil.extractUsername(jwt);
+	public ResponseEntity<?> editUserAboutDetails(@RequestBody UserAbout userAboutObject,
+			@RequestHeader(name = "Authorization") String token) throws SignatureException {
+		System.out.println(userAboutObject);
+		String jwt = token.substring(7);
+		String userName = jwtUtil.extractUsername(jwt);
 
-			service.updateUserAboutDetails(userAboutObject, userName);
-			return new ResponseEntity<>(HttpStatus.OK);
-		
+		service.updateUserAboutDetails(userAboutObject, userName);
+		return new ResponseEntity<>(HttpStatus.OK);
+
 	}
 
 	// returns a list of both followers and following
