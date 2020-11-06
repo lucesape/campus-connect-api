@@ -17,6 +17,7 @@ public class UserAbout {
 	private String bio;
 	private String intro;
 	private HashMap<String, String> socialLinks;
+	private String profilePhotoURL;
 
 	public UserAbout() {
 		super();
@@ -51,7 +52,7 @@ public class UserAbout {
 	public UserAbout(String userName, String email, String firstName, String lastName, String phone,
 			List<Long> followers, List<Long> following, List<Experience> experiences, List<Long> posts,
 			List<Fishpond> fishponds, College collegeDetails, PersonalDetails personalDetails, String bio, String intro,
-			HashMap<String, String> socialLinks) {
+			HashMap<String, String> socialLinks, String profilePhotoURL) {
 		super();
 		this.userName = userName;
 		this.email = email;
@@ -65,6 +66,7 @@ public class UserAbout {
 		this.bio = bio;
 		this.intro = intro;
 		this.socialLinks = socialLinks;
+		this.profilePhotoURL = profilePhotoURL;
 	}
 
 	public String getUserName() {
@@ -131,14 +133,6 @@ public class UserAbout {
 		this.socialLinks = socialLinks;
 	}
 
-	@Override
-	public String toString() {
-		return "UserDTO [userName=" + userName + ", email=" + email + ", firstName=" + firstName + ", lastName="
-				+ lastName + ", phone=" + phone + ", experiences=" + experiences + ", fishponds=" + fishponds
-				+ ", collegeDetails=" + collegeDetails + ", personalDetails=" + personalDetails + ", bio=" + bio
-				+ ", intro=" + intro + ", socialLinks=" + socialLinks + "]";
-	}
-
 	public College getCollegeDetails() {
 		return collegeDetails;
 	}
@@ -169,6 +163,14 @@ public class UserAbout {
 
 	public void setIntro(String intro) {
 		this.intro = intro;
+	}
+
+	public String getProfilePhotoURL() {
+		return profilePhotoURL;
+	}
+
+	public void setProfilePhotoURL(String profilePhotoURL) {
+		this.profilePhotoURL = profilePhotoURL;
 	}
 
 }
