@@ -112,6 +112,30 @@ public class UserService {
 		// Nothing to return
 
 	}
+	public void removeFollowerFollowing(String follower, String following, String jwtUserName)
+	{
+		if (!jwtUserName.equals(follower))
+			throw new SignatureException("Token does not match with userName");
+		UserDBEntity followerEntity = repository.findUserByUserName(follower);
+		if (followerEntity == null)
+			throw new UsernameNotFoundException("User " + follower + " Not Found");
+		UserDBEntity followingEntity = repository.findUserByUserName(following);
+		if (followingEntity == null)
+			throw new UsernameNotFoundException("User " + following + " Not Found");
+		List<String> followersList = followingEntity.getFollowers();
+		if (!followersList.contains(follower))
+			return;
+		followersList.remove(follower);
+		followingEntity.setFollowers(followersList);
+		repository.updateUser(followingEntity);
+
+		List<String> followingList = followerEntity.getFollowing();
+		if (!followingList.contains(following))
+			return;
+		followingList.remove(following);
+		followerEntity.setFollowing(followingList);
+		repository.updateUser(followerEntity);
+	}
 
 	// public UserDTO getUserByIdAndUserName(String userId, String userName) {
 	// UserDBEntity userDBEntity =
