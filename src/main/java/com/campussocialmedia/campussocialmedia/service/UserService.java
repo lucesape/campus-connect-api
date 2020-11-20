@@ -65,7 +65,8 @@ public class UserService {
 	private UserFollowerFollowing convertToFollowerFollowing(UserDBEntity user) {
 		return modelMapper.map(user, UserFollowerFollowing.class);
 	}
-
+	
+//	TESTED
 	public UserDTO addUser(UserDTO user) {
 		List<Long> emptyList = new ArrayList<Long>();
 		user.setPersonalChats(emptyList);
@@ -78,7 +79,6 @@ public class UserService {
 		user.setIntro("-");
 		user.setPosts(new ArrayList<>());
 
-		System.out.println(user);
 
 		UserDBEntity userEntity = repository.addUser(convertToEntity(user));
 		return convertToDTO(userEntity);
@@ -143,22 +143,23 @@ public class UserService {
 	// UserDTO userDTO = convertToDTO(userDBEntity);
 	// return userDTO;
 	// }
-
+	//TESTED
 	public UserDTO getUserByUserName(String userName) {
 		UserDBEntity userDBEntity = repository.findUserByUserName(userName);
 		UserDTO userDTO = convertToDTO(userDBEntity);
 		return userDTO;
 	}
-
+	// Not Used
 	public UserDetailsEntity getUserBasicDetailsByUserName(String userName) {
 		UserDBEntity userDBEntity = repository.findUserByUserName(userName);
 		UserDetailsEntity userDetailsEntity = convertToDetailsEntity(userDBEntity);
 		return userDetailsEntity;
 	}
-
+	// Tested
 	public UserAbout getUserAboutByUserName(String userName) {
 		UserDBEntity userDBEntity = repository.findUserByUserName(userName);
 		UserAbout userAbout = convertToAbout(userDBEntity);
+		System.out.println(userAbout);
 		return userAbout;
 	}
 
@@ -169,10 +170,9 @@ public class UserService {
 		}
 		UserDBEntity originalUser = repository.findUserByUserName(user.getUserName());
 		UserDBEntity updatedUser = convertToEntity(user, originalUser);
-		System.out.println(updatedUser);
 		updatedUser = repository.updateUserAboutDetails(updatedUser);
 	}
-
+	// Tested
 	public UserFollowerFollowing getUserFollowerFollowingByUserName(String userName) {
 		UserDBEntity userDBEntity = repository.findUserByUserName(userName);
 		UserFollowerFollowing userAbout = convertToFollowerFollowing(userDBEntity);

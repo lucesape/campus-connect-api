@@ -56,4 +56,41 @@ public class PersonalDetails {
 		this.achievements = achievements;
 	}
 
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((achievements == null) ? 0 : achievements.hashCode());
+		result = prime * result + ((homeTown == null) ? 0 : homeTown.hashCode());
+		result = prime * result + ((talents == null) ? 0 : talents.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		PersonalDetails other = (PersonalDetails) obj;
+		if (achievements == null) {
+			if (other.achievements != null)
+				return false;
+		} else if (!achievements.equals(other.achievements))
+			return false;
+		if (homeTown == null) {
+			if (other.homeTown != null)
+				return false;
+		} else if (!homeTown.equals(other.homeTown))
+			return false;
+		if (talents == null) {
+			if (other.talents != null)
+				return false;
+		} else if (!talents.equals(other.talents))
+			return false;
+		return true;
+	}
+
 }
