@@ -65,8 +65,8 @@ public class UserService {
 	private UserFollowerFollowing convertToFollowerFollowing(UserDBEntity user) {
 		return modelMapper.map(user, UserFollowerFollowing.class);
 	}
-	
-//	TESTED
+
+	// TESTED
 	public UserDTO addUser(UserDTO user) {
 		List<Long> emptyList = new ArrayList<Long>();
 		user.setPersonalChats(emptyList);
@@ -78,7 +78,6 @@ public class UserService {
 		user.setBio("-");
 		user.setIntro("-");
 		user.setPosts(new ArrayList<>());
-
 
 		UserDBEntity userEntity = repository.addUser(convertToEntity(user));
 		return convertToDTO(userEntity);
@@ -112,8 +111,8 @@ public class UserService {
 		// Nothing to return
 
 	}
-	public void removeFollowerFollowing(String follower, String following, String jwtUserName)
-	{
+
+	public void removeFollowerFollowing(String follower, String following, String jwtUserName) {
 		if (!jwtUserName.equals(follower))
 			throw new SignatureException("Token does not match with userName");
 		UserDBEntity followerEntity = repository.findUserByUserName(follower);
@@ -143,18 +142,20 @@ public class UserService {
 	// UserDTO userDTO = convertToDTO(userDBEntity);
 	// return userDTO;
 	// }
-	//TESTED
+	// TESTED
 	public UserDTO getUserByUserName(String userName) {
 		UserDBEntity userDBEntity = repository.findUserByUserName(userName);
 		UserDTO userDTO = convertToDTO(userDBEntity);
 		return userDTO;
 	}
+
 	// Not Used
 	public UserDetailsEntity getUserBasicDetailsByUserName(String userName) {
 		UserDBEntity userDBEntity = repository.findUserByUserName(userName);
 		UserDetailsEntity userDetailsEntity = convertToDetailsEntity(userDBEntity);
 		return userDetailsEntity;
 	}
+
 	// Tested
 	public UserAbout getUserAboutByUserName(String userName) {
 		UserDBEntity userDBEntity = repository.findUserByUserName(userName);
@@ -172,6 +173,7 @@ public class UserService {
 		UserDBEntity updatedUser = convertToEntity(user, originalUser);
 		updatedUser = repository.updateUserAboutDetails(updatedUser);
 	}
+
 	// Tested
 	public UserFollowerFollowing getUserFollowerFollowingByUserName(String userName) {
 		UserDBEntity userDBEntity = repository.findUserByUserName(userName);
@@ -191,6 +193,11 @@ public class UserService {
 		UserDBEntity user = repository.findUserByUserName(userName);
 		user.setProfilePhotoURL(url);
 		repository.updateUser(user);
+	}
+
+	public List<String> getFollowing(String userName) {
+		UserDBEntity user = repository.findUserByUserName(userName);
+		return user.getFollowing();
 	}
 
 }
