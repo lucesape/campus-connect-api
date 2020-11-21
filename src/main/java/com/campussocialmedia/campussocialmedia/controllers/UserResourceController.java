@@ -149,15 +149,15 @@ public class UserResourceController {
 		return new ResponseEntity<>("Follower Added", HttpStatus.OK);
 
 	}
+
 	@PostMapping("/unfollow")
 	public ResponseEntity<?> unfollowUser(@RequestHeader(name = "Authorization") String token,
-		@RequestBody Map<String, String> jsonObject) throws SignatureException
-	{
+			@RequestBody Map<String, String> jsonObject) throws SignatureException {
 		String jwt = token.substring(7);
 		String userName = jwtUtil.extractUsername(jwt);
 
 		service.removeFollowerFollowing(jsonObject.get("follower"), jsonObject.get("following"), userName);
-		return new ResponseEntity<>("UnFollowed", HttpStatus.OK);	
+		return new ResponseEntity<>("UnFollowed", HttpStatus.OK);
 	}
 
 	// @DeleteMapping("/deleteUser/{userId}/{userName}")

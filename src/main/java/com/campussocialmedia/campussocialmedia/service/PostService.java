@@ -1,5 +1,6 @@
 package com.campussocialmedia.campussocialmedia.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.campussocialmedia.campussocialmedia.entity.Post;
@@ -49,6 +50,14 @@ public class PostService {
 
     public List<Post> findPostsByUserName(String userName) {
         return repository.findPostsByUserName(userName);
+    }
+
+    public List<Post> findAllPostsByUserNames(List<String> userNames) {
+        List<Post> posts = new ArrayList<Post>();
+        for (String userName : userNames) {
+            posts.addAll(this.findPostsByUserName(userName));
+        }
+        return posts;
     }
 
 }
