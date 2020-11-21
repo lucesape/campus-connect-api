@@ -173,4 +173,109 @@ public class UserAbout {
 		this.profilePhotoURL = profilePhotoURL;
 	}
 
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((bio == null) ? 0 : bio.hashCode());
+		result = prime * result + ((collegeDetails == null) ? 0 : collegeDetails.hashCode());
+		result = prime * result + ((email == null) ? 0 : email.hashCode());
+		result = prime * result + ((experiences == null) ? 0 : experiences.hashCode());
+		result = prime * result + ((firstName == null) ? 0 : firstName.hashCode());
+		result = prime * result + ((fishponds == null) ? 0 : fishponds.hashCode());
+		result = prime * result + ((intro == null) ? 0 : intro.hashCode());
+		result = prime * result + ((lastName == null) ? 0 : lastName.hashCode());
+		result = prime * result + ((personalDetails == null) ? 0 : personalDetails.hashCode());
+		result = prime * result + ((phone == null) ? 0 : phone.hashCode());
+		result = prime * result + ((profilePhotoURL == null) ? 0 : profilePhotoURL.hashCode());
+		result = prime * result + ((socialLinks == null) ? 0 : socialLinks.hashCode());
+		result = prime * result + ((userName == null) ? 0 : userName.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		UserAbout other = (UserAbout) obj;
+		if (bio == null) {
+			if (other.bio != null)
+				return false;
+		} else if (!bio.equals(other.bio))
+			return false;
+		if (collegeDetails == null) {
+			if (other.collegeDetails != null)
+				return false;
+		} else if (!collegeDetails.equals(other.collegeDetails))
+			return false;
+		if (email == null) {
+			if (other.email != null)
+				return false;
+		} else if (!email.equals(other.email))
+			return false;
+		if (experiences == null) {
+			if (other.experiences != null)
+				return false;
+		} else if (!experiences.equals(other.experiences))
+			return false;
+		if (firstName == null) {
+			if (other.firstName != null)
+				return false;
+		} else if (!firstName.equals(other.firstName))
+			return false;
+		if (fishponds == null) {
+			if (other.fishponds != null)
+				return false;
+		} else if (!fishponds.equals(other.fishponds))
+			return false;
+		if (intro == null) {
+			if (other.intro != null)
+				return false;
+		} else if (!intro.equals(other.intro))
+			return false;
+		if (lastName == null) {
+			if (other.lastName != null)
+				return false;
+		} else if (!lastName.equals(other.lastName))
+			return false;
+		if (personalDetails == null) {
+			if (other.personalDetails != null)
+				return false;
+		} else if (!personalDetails.equals(other.personalDetails))
+			return false;
+		if (phone == null) {
+			if (other.phone != null)
+				return false;
+		} else if (!phone.equals(other.phone))
+			return false;
+		if (profilePhotoURL == null) {
+			if (other.profilePhotoURL != null)
+				return false;
+		} else if (!profilePhotoURL.equals(other.profilePhotoURL))
+			return false;
+		if (socialLinks == null) {
+			if (other.socialLinks != null)
+				return false;
+		} else if (!socialLinks.equals(other.socialLinks))
+			return false;
+		if (userName == null) {
+			if (other.userName != null)
+				return false;
+		} else if (!userName.equals(other.userName))
+			return false;
+		return true;
+	}
+
+	@Override
+	public String toString() {
+		return "UserAbout [userName=" + userName + ", email=" + email + ", firstName=" + firstName + ", lastName="
+				+ lastName + ", phone=" + phone + ", experiences=" + experiences + ", fishponds=" + fishponds
+				+ ", collegeDetails=" + collegeDetails + ", personalDetails=" + personalDetails + ", bio=" + bio
+				+ ", intro=" + intro + ", socialLinks=" + socialLinks + ", profilePhotoURL=" + profilePhotoURL + "]";
+	}
+
 }
