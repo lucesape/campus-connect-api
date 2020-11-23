@@ -1,10 +1,12 @@
 package com.campussocialmedia.campussocialmedia.controllers;
 
 import java.util.List;
+import java.util.Map;
 
 import com.campussocialmedia.campussocialmedia.entity.Post;
 import com.campussocialmedia.campussocialmedia.entity.PostCreationRequest;
 import com.campussocialmedia.campussocialmedia.service.PostService;
+import com.campussocialmedia.campussocialmedia.util.JwtUtil;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,6 +16,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -23,12 +27,20 @@ public class PostController {
     @Autowired
     private PostService service;
 
+    @Autowired
+    private JwtUtil jwtUtil;
+
     /*
      * This endpoint is for creating new posts. The user will send a form-data
      * (PostCreationRequest).
      */
     @PostMapping("/post")
-    public ResponseEntity<?> addPost(@ModelAttribute PostCreationRequest post) {
+    public ResponseEntity<?> addPost(@RequestHeader(name = "Authorization") String token,
+            @ModelAttribute PostCreationRequest post) {
+
+        String jwt = token.substring(7);
+        String userName = jwtUtil.extractUsername(jwt);
+        post.setUserName(userName);
         Post newPost = service.addPost(post);
         return new ResponseEntity<>(newPost, HttpStatus.OK);
     }
@@ -49,6 +61,23 @@ public class PostController {
     public ResponseEntity<?> findPostsByUserName(@PathVariable String userName) {
         List<Post> posts = service.findPostsByUserName(userName);
         return new ResponseEntity<>(posts, HttpStatus.OK);
+    }
+
+    @PostMapping("/allPosts")
+    public ResponseEntity<?> findPostsForAllUserNames(@RequestBody Map<String, List<String>> jsonObject) {
+
+        List<String> userNames = jsonObject.get("userNames");
+        return new ResponseEntity<>(service.findAllPostsByUserNames(userNames), HttpStatus.OK);
+    }
+
+
+    // Add the userName of the users who liked the post
+    @PostMapping("/addLike")
+    public ResponseEntity<?> addLikeToPost(@RequestBody Map<String, String> jsonObject) {
+        String userName = jsonObject.get("userName");
+        String postID = jsonObject.get("postID");
+        service.addLikeToPost(userName, postID);
+        return new ResponseEntity<>("Liked", HttpStatus.OK);
     }
 
 }

@@ -1,10 +1,15 @@
 package com.campussocialmedia.campussocialmedia.repository;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBQueryExpression;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBSaveExpression;
 import com.amazonaws.services.dynamodbv2.datamodeling.PaginatedQueryList;
+import com.amazonaws.services.dynamodbv2.model.AttributeValue;
+import com.amazonaws.services.dynamodbv2.model.ExpectedAttributeValue;
 import com.campussocialmedia.campussocialmedia.entity.Post;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +22,7 @@ public class PostRepository {
     private DynamoDBMapper mapper;
 
     public Post addPost(Post post) {
+        System.out.println(post);
         mapper.save(post);
         return post;
     }
@@ -53,4 +59,16 @@ public class PostRepository {
         return results.subList(0, results.size());
     }
 
+    public void updatePost(Post post)
+    {
+        mapper.save(post, buildExpression(post));
+    }
+
+    private DynamoDBSaveExpression buildExpression(Post post) {
+		DynamoDBSaveExpression dynamoDBSaveExpression = new DynamoDBSaveExpression();
+		Map<String, ExpectedAttributeValue> expectedMap = new HashMap<>();
+		expectedMap.put("userName", new ExpectedAttributeValue(new AttributeValue().withS(post.getUserName())));
+		dynamoDBSaveExpression.setExpected(expectedMap);
+		return dynamoDBSaveExpression;
+	}
 }

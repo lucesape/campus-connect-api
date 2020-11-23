@@ -52,5 +52,40 @@ public class College implements Serializable {
 	public String toString() {
 		return "College [year=" + year + ", branch=" + branch  + ", collegeName=" + collegeName + "]";
 	}
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((branch == null) ? 0 : branch.hashCode());
+		result = prime * result + ((collegeName == null) ? 0 : collegeName.hashCode());
+		result = prime * result + ((year == null) ? 0 : year.hashCode());
+		return result;
+	}
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		College other = (College) obj;
+		if (branch == null) {
+			if (other.branch != null)
+				return false;
+		} else if (!branch.equals(other.branch))
+			return false;
+		if (collegeName == null) {
+			if (other.collegeName != null)
+				return false;
+		} else if (!collegeName.equals(other.collegeName))
+			return false;
+		if (year == null) {
+			if (other.year != null)
+				return false;
+		} else if (!year.equals(other.year))
+			return false;
+		return true;
+	}
 	
 }
