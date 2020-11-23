@@ -200,4 +200,9 @@ public class UserService {
 		return user.getFollowing();
 	}
 
+	public String getProfilePhotoForUserName(String userName) {
+		UserDBEntity user = repository.findUserByUserName(userName);
+		return user.getProfilePhotoURL();
+	}
+
 }

@@ -175,4 +175,9 @@ public class UserResourceController {
 		return new ResponseEntity<>(fileURL, HttpStatus.OK);
 	}
 
+	@GetMapping("/getProfilePhoto/{userName}")
+	public String getProfilePhotoForUserName(@PathVariable String userName) {
+		return service.getProfilePhotoForUserName(userName);
+	}
+
 }
