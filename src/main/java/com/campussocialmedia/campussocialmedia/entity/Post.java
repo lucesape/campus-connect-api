@@ -1,6 +1,8 @@
 package com.campussocialmedia.campussocialmedia.entity;
 
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAutoGenerateStrategy;
@@ -21,6 +23,7 @@ public class Post implements Serializable {
     private String userName;
     private String caption;
     private String timeStamp;
+    private Set<String> likes;
     // The URL will be NULL if there is no file.
     private String url;
 
@@ -73,6 +76,7 @@ public class Post implements Serializable {
     public void setUrl(String url) {
         this.url = url;
     }
+    
 
     public Post(String postID, String userName, String caption, String timeStamp, String url) {
         this.postID = postID;
@@ -82,9 +86,28 @@ public class Post implements Serializable {
         this.url = url;
     }
 
+    
+    @DynamoDBAttribute
+    public Set<String> getLikes() {
+        return likes;
+    }
+
+    public void setLikes(Set<String> likes) {
+        this.likes = likes;
+    }
+
+    public Post(String postID, String userName, String caption, String timeStamp, Set<String> likes, String url) {
+        this.postID = postID;
+        this.userName = userName;
+        this.caption = caption;
+        this.timeStamp = timeStamp;
+        this.likes = likes;
+        this.url = url;
+    }
+
     @Override
     public String toString() {
-        return "Post [caption=" + caption + ", postID=" + postID + ", timeStamp=" + timeStamp + ", url=" + url
-                + ", userName=" + userName + "]";
+        return "Post [caption=" + caption + ", likes=" + likes + ", postID=" + postID + ", timeStamp=" + timeStamp
+                + ", url=" + url + ", userName=" + userName + "]";
     }
 }

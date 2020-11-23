@@ -70,4 +70,14 @@ public class PostController {
         return new ResponseEntity<>(service.findAllPostsByUserNames(userNames), HttpStatus.OK);
     }
 
+
+    // Add the userName of the users who liked the post
+    @PostMapping("/addLike")
+    public ResponseEntity<?> addLikeToPost(@RequestBody Map<String, String> jsonObject) {
+        String userName = jsonObject.get("userName");
+        String postID = jsonObject.get("postID");
+        service.addLikeToPost(userName, postID);
+        return new ResponseEntity<>("Liked", HttpStatus.OK);
+    }
+
 }

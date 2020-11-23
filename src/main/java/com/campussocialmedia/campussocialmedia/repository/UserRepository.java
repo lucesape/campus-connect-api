@@ -45,7 +45,7 @@ public class UserRepository {
 	public UserDBEntity updateUserAboutDetails(UserDBEntity user)
 	{
 		mapper.save(user, buildExpression(user));
-		return mapper.load(UserDBEntity.class, user.getUserName());
+		return user;
 			
 	}
 

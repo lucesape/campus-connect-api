@@ -1,7 +1,9 @@
 package com.campussocialmedia.campussocialmedia.service;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import com.campussocialmedia.campussocialmedia.entity.Post;
 import com.campussocialmedia.campussocialmedia.entity.PostCreationRequest;
@@ -36,11 +38,15 @@ public class PostService {
      */
     public Post addPost(PostCreationRequest post) {
         Post convertedPost = convertToPost(post);
+        convertedPost.setLikes(new HashSet<String>());
         if (post.getFile() != null) {
             // Upload this file.
             String url = mediaService.uploadFile(post.getFile());
             convertedPost.setUrl(url);
         }
+        System.out.println("Hello");
+        System.out.println(convertedPost);
+
         return repository.addPost(convertedPost);
     }
 
@@ -58,6 +64,16 @@ public class PostService {
             posts.addAll(this.findPostsByUserName(userName));
         }
         return posts;
+    }
+
+    public void addLikeToPost(String userName, String postID)
+    {
+        Post post = repository.findPostByID(postID);
+        Set<String> likeSet =  post.getLikes();
+        System.out.println(likeSet);
+        likeSet.add(userName);
+        post.setLikes(likeSet);
+        repository.updatePost(post);
     }
 
 }
