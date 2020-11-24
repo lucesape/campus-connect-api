@@ -38,14 +38,16 @@ public class PostService {
      */
     public Post addPost(PostCreationRequest post) {
         Post convertedPost = convertToPost(post);
-        convertedPost.setLikes(new HashSet<String>());
+        // Set<String> t = new HashSet<String>();
+        // t.add(convertedPost.getUserName());
+        // convertedPost.setLikes(t);
         if (post.getFile() != null) {
             // Upload this file.
             String url = mediaService.uploadFile(post.getFile());
             convertedPost.setUrl(url);
         }
-        System.out.println("Hello");
-        System.out.println(convertedPost);
+        // System.out.println("Hello");
+        // System.out.println(convertedPost);
 
         return repository.addPost(convertedPost);
     }
@@ -69,10 +71,20 @@ public class PostService {
     public void addLikeToPost(String userName, String postID)
     {
         Post post = repository.findPostByID(postID);
-        Set<String> likeSet =  post.getLikes();
-        System.out.println(likeSet);
-        likeSet.add(userName);
-        post.setLikes(likeSet);
+        if(post.getLikes() == null)
+        {
+            Set<String> t = new HashSet<String>();
+            t.add(post.getUserName());
+            post.setLikes(t);
+        }
+        else
+        {
+            Set<String> likeSet =  post.getLikes();
+            System.out.println(likeSet);
+            likeSet.add(userName);
+            post.setLikes(likeSet);
+        }
+        
         repository.updatePost(post);
     }
 

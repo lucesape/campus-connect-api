@@ -78,13 +78,13 @@ public class Post implements Serializable {
     }
     
 
-    public Post(String postID, String userName, String caption, String timeStamp, String url) {
-        this.postID = postID;
-        this.userName = userName;
-        this.caption = caption;
-        this.timeStamp = timeStamp;
-        this.url = url;
-    }
+    // public Post(String postID, String userName, String caption, String timeStamp, String url) {
+    //     this.postID = postID;
+    //     this.userName = userName;
+    //     this.caption = caption;
+    //     this.timeStamp = timeStamp;
+    //     this.url = url;
+    // }
 
     
     @DynamoDBAttribute
