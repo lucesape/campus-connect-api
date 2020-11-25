@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.campussocialmedia.campussocialmedia.entity.Comment;
 import com.campussocialmedia.campussocialmedia.entity.Post;
 import com.campussocialmedia.campussocialmedia.entity.PostCreationRequest;
 import com.campussocialmedia.campussocialmedia.repository.PostRepository;
@@ -74,7 +75,7 @@ public class PostService {
         if(post.getLikes() == null)
         {
             Set<String> t = new HashSet<String>();
-            t.add(post.getUserName());
+            t.add(userName);
             post.setLikes(t);
         }
         else
@@ -85,6 +86,32 @@ public class PostService {
             post.setLikes(likeSet);
         }
         
+        repository.updatePost(post);
+    }
+
+    public void removeLike(String userName, String postID)
+    {
+        Post post = repository.findPostByID(postID);
+        
+        if(post.getLikes() == null)
+            return;
+
+        Set<String> likeSet = post.getLikes();
+        if(likeSet.contains(userName))
+            likeSet.remove(userName);
+        else
+            return;
+        post.setLikes(likeSet);
+        repository.updatePost(post);
+
+    }
+    
+    public void addCommentToPost(String name, String postID, String comment){
+        Post post = repository.findPostByID(postID);
+        List<Comment> commentList = post.getComments();
+        Comment commentObj = new Comment(name, comment);
+        commentList.add(commentObj);
+        post.setComments(commentList);
         repository.updatePost(post);
     }
 

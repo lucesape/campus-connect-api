@@ -2,6 +2,7 @@ package com.campussocialmedia.campussocialmedia.entity;
 
 import java.io.Serializable;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
@@ -24,6 +25,7 @@ public class Post implements Serializable {
     private String caption;
     private String timeStamp;
     private Set<String> likes;
+    private List<Comment> comments;
     // The URL will be NULL if there is no file.
     private String url;
 
@@ -96,18 +98,32 @@ public class Post implements Serializable {
         this.likes = likes;
     }
 
-    public Post(String postID, String userName, String caption, String timeStamp, Set<String> likes, String url) {
+    
+
+    
+
+    public List<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<Comment> comments) {
+        this.comments = comments;
+    }
+
+    @Override
+    public String toString() {
+        return "Post [caption=" + caption + ", comments=" + comments + ", likes=" + likes + ", postID=" + postID
+                + ", timeStamp=" + timeStamp + ", url=" + url + ", userName=" + userName + "]";
+    }
+
+    public Post(String postID, String userName, String caption, String timeStamp, Set<String> likes,
+            List<Comment> comments, String url) {
         this.postID = postID;
         this.userName = userName;
         this.caption = caption;
         this.timeStamp = timeStamp;
         this.likes = likes;
+        this.comments = comments;
         this.url = url;
-    }
-
-    @Override
-    public String toString() {
-        return "Post [caption=" + caption + ", likes=" + likes + ", postID=" + postID + ", timeStamp=" + timeStamp
-                + ", url=" + url + ", userName=" + userName + "]";
     }
 }

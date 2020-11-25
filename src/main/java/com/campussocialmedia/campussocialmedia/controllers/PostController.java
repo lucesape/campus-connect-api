@@ -73,11 +73,22 @@ public class PostController {
 
     // Add the userName of the users who liked the post
     @PostMapping("/addLike")
-    public ResponseEntity<?> addLikeToPost(@RequestBody Map<String, String> jsonObject) {
-        String userName = jsonObject.get("userName");
+    public ResponseEntity<?> addLikeToPost(@RequestHeader(name = "Authorization") String token, @RequestBody Map<String, String> jsonObject) {
+        String jwt = token.substring(7);
+        String userName = jwtUtil.extractUsername(jwt);
         String postID = jsonObject.get("postID");
         service.addLikeToPost(userName, postID);
         return new ResponseEntity<>("Liked", HttpStatus.OK);
     }
 
+    @PostMapping("/removeLike")
+    public ResponseEntity<?> removeLikeToPost(@RequestHeader(name = "Authorization") String token, @RequestBody Map<String, String> jsonObject) {
+        String jwt = token.substring(7);
+        String userName = jwtUtil.extractUsername(jwt);
+        String postID = jsonObject.get("postID");
+        service.removeLike(userName, postID);
+        return new ResponseEntity<>("Like Removed", HttpStatus.OK);
+    }
+
+    
 }

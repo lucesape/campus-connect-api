@@ -64,6 +64,7 @@ public class PostRepository {
         mapper.save(post, buildExpression(post));
     }
 
+
     private DynamoDBSaveExpression buildExpression(Post post) {
 		DynamoDBSaveExpression dynamoDBSaveExpression = new DynamoDBSaveExpression();
 		Map<String, ExpectedAttributeValue> expectedMap = new HashMap<>();
