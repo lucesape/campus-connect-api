@@ -27,6 +27,15 @@ public class UserDetailsEntity {
 		this.profilePhotoURL = profilePhotoURL;
 	}
 
+	public UserDetailsEntity(String userName, String email, String firstName, String lastName, String intro) {
+		super();
+		this.userName = userName;
+		this.email = email;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.intro = intro;
+	}
+
 	public String getUserName() {
 		return userName;
 	}
