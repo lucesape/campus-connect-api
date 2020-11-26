@@ -101,7 +101,10 @@ public class PostService {
             likeSet.remove(userName);
         else
             return;
-        post.setLikes(likeSet);
+        if(likeSet.size() == 0)
+            post.setLikes(null);
+        else
+            post.setLikes(likeSet);
         repository.updatePost(post);
 
     }
