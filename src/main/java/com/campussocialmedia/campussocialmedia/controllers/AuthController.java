@@ -11,6 +11,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.ModelAttribute;
 // import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -52,7 +53,7 @@ public class AuthController {
 	 * username in the incoming AuthenticationRequest exists and act accordingly.
 	 */
 	@PostMapping(value = "/signUp")
-	public ResponseEntity<?> signUp(@RequestBody AuthenticationRequest authenticationRequest) throws Exception {
+	public ResponseEntity<?> signUp(@ModelAttribute AuthenticationRequest authenticationRequest) throws Exception {
 
 		// Try authenticating the given UserName and Password.
 		// If no exception is thrown, then these credentials are already used.
@@ -65,21 +66,18 @@ public class AuthController {
 					authenticationRequest.getUserName(), authenticationRequest.getPassword()));
 		} catch (AuthenticationException e) {
 			// This user does not exist so user can be created
-			UserDTO userDTO = new UserDTO(authenticationRequest.getUserName(), authenticationRequest.getEmail(),
-					authenticationRequest.getPassword(), authenticationRequest.getFirstName(),
-					authenticationRequest.getLastName(),authenticationRequest.getCollegeDetails());
-			//System.out.println("New user created here:" + userDTO);
-			userDTO = userService.addUser(userDTO);
-			//System.out.println("#####");
+			// System.out.println("New user created here:" + userDTO);
+			UserDTO userDTO = userService.addUser(authenticationRequest);
+			// System.out.println("#####");
 			// Why is JWT token returned after signup?
 			// For now. Once we get email verification up and running, we will only return
 			// JTW on login.
 			UserDetails userDetails = new org.springframework.security.core.userdetails.User(userDTO.getUserName(),
 					userDTO.getPassword(), new ArrayList<>());
 			final String jwt = jwtTokenUtil.generateToken(userDetails);
-			
-			UserDetailsEntity userDetailsEntity = new UserDetailsEntity(userDTO.getUserName(),
-					userDTO.getEmail(), userDTO.getFirstName(), userDTO.getLastName(), userDTO.getIntro());
+
+			UserDetailsEntity userDetailsEntity = new UserDetailsEntity(userDTO.getUserName(), userDTO.getEmail(),
+					userDTO.getFirstName(), userDTO.getLastName(), userDTO.getIntro());
 
 			return new ResponseEntity<>(new AuthenticationResponse(jwt, userDetailsEntity),
 					org.springframework.http.HttpStatus.CREATED);
@@ -118,11 +116,11 @@ public class AuthController {
 		authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authenticationRequest.getUserName(),
 				authenticationRequest.getPassword()));
 
-			UserDetailsEntity user = userService.getUserBasicDetailsByUserName(authenticationRequest.getUserName());
-			UserDetails userDetails = new org.springframework.security.core.userdetails.User(authenticationRequest.getUserName(),
-					authenticationRequest.getPassword(), new ArrayList<>());
-			final String jwt = jwtTokenUtil.generateToken(userDetails);
-			return ResponseEntity.ok(new AuthenticationResponse(jwt, user));
+		UserDetailsEntity user = userService.getUserBasicDetailsByUserName(authenticationRequest.getUserName());
+		UserDetails userDetails = new org.springframework.security.core.userdetails.User(
+				authenticationRequest.getUserName(), authenticationRequest.getPassword(), new ArrayList<>());
+		final String jwt = jwtTokenUtil.generateToken(userDetails);
+		return ResponseEntity.ok(new AuthenticationResponse(jwt, user));
 
 	}
 

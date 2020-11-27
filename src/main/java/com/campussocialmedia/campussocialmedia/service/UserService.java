@@ -11,6 +11,8 @@ import org.springframework.stereotype.Service;
 
 import io.jsonwebtoken.SignatureException;
 
+import com.campussocialmedia.campussocialmedia.entity.AuthenticationRequest;
+import com.campussocialmedia.campussocialmedia.entity.College;
 import com.campussocialmedia.campussocialmedia.entity.PersonalDetails;
 import com.campussocialmedia.campussocialmedia.entity.UserAbout;
 import com.campussocialmedia.campussocialmedia.entity.UserDBEntity;
@@ -27,6 +29,9 @@ public class UserService {
 
 	@Autowired
 	private ModelMapper modelMapper;
+
+	@Autowired
+	private MediaService mediaService;
 
 	private UserDBEntity convertToEntity(UserDTO user) {
 		return modelMapper.map(user, UserDBEntity.class);
@@ -66,8 +71,20 @@ public class UserService {
 		return modelMapper.map(user, UserFollowerFollowing.class);
 	}
 
+	private UserDTO convertToDTO(AuthenticationRequest authenticationRequest) {
+		return modelMapper.map(authenticationRequest, UserDTO.class);
+	}
+
 	// TESTED
-	public UserDTO addUser(UserDTO user) {
+	public UserDTO addUser(AuthenticationRequest authenticationRequest) {
+		// Upload file and get URL
+		String url = mediaService.uploadFile(authenticationRequest.getImage());
+		UserDTO user = convertToDTO(authenticationRequest);
+		user.setProfilePhotoURL(url);
+		College college = new College(authenticationRequest.getYear(), authenticationRequest.getBranch(),
+				authenticationRequest.getCollegeName());
+		user.setCollegeDetails(college);
+
 		List<Long> emptyList = new ArrayList<Long>();
 		user.setPersonalChats(emptyList);
 		user.setGroups(emptyList);
@@ -191,6 +208,9 @@ public class UserService {
 
 	public void addProfilePhotoURL(String userName, String url) {
 		UserDBEntity user = repository.findUserByUserName(userName);
+		if (user == null) {
+			throw new UsernameNotFoundException(userName);
+		}
 		user.setProfilePhotoURL(url);
 		repository.updateUser(user);
 	}
