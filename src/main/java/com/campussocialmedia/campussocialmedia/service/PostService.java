@@ -39,9 +39,17 @@ public class PostService {
      */
     public Post addPost(PostCreationRequest post) {
         Post convertedPost = convertToPost(post);
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
         // Set<String> t = new HashSet<String>();
         // t.add(convertedPost.getUserName());
         // convertedPost.setLikes(t);
+=======
+        // convertedPost.setLikes(new HashSet<String>());
+>>>>>>> Stashed changes
+=======
+        // convertedPost.setLikes(new HashSet<String>());
+>>>>>>> Stashed changes
         if (post.getFile() != null) {
             // Upload this file.
             String url = mediaService.uploadFile(post.getFile());
