@@ -105,7 +105,7 @@ class UserServiceTest {
 		expectedDTO.setPosts(new ArrayList<>());
 		
 		Mockito.when(repository.addUser(user)).thenReturn(user);
-		assertTrue(new ReflectionEquals(expectedDTO).matches(userservice.addUser(userDTO)));
+		assertTrue(new org.mockito.internal.matchers.apachecommons.ReflectionEquals(expectedDTO).matches(userservice));
 	}
 	
 	@Test
