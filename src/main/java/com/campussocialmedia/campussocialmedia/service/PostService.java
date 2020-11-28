@@ -39,17 +39,11 @@ public class PostService {
      */
     public Post addPost(PostCreationRequest post) {
         Post convertedPost = convertToPost(post);
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
         // Set<String> t = new HashSet<String>();
         // t.add(convertedPost.getUserName());
         // convertedPost.setLikes(t);
-=======
         // convertedPost.setLikes(new HashSet<String>());
->>>>>>> Stashed changes
-=======
         // convertedPost.setLikes(new HashSet<String>());
->>>>>>> Stashed changes
         if (post.getFile() != null) {
             // Upload this file.
             String url = mediaService.uploadFile(post.getFile());
@@ -77,47 +71,42 @@ public class PostService {
         return posts;
     }
 
-    public void addLikeToPost(String userName, String postID)
-    {
+    public void addLikeToPost(String userName, String postID) {
         Post post = repository.findPostByID(postID);
-        if(post.getLikes() == null)
-        {
+        if (post.getLikes() == null) {
             Set<String> t = new HashSet<String>();
             t.add(userName);
             post.setLikes(t);
-        }
-        else
-        {
-            Set<String> likeSet =  post.getLikes();
+        } else {
+            Set<String> likeSet = post.getLikes();
             System.out.println(likeSet);
             likeSet.add(userName);
             post.setLikes(likeSet);
         }
-        
+
         repository.updatePost(post);
     }
 
-    public void removeLike(String userName, String postID)
-    {
+    public void removeLike(String userName, String postID) {
         Post post = repository.findPostByID(postID);
-        
-        if(post.getLikes() == null)
+
+        if (post.getLikes() == null)
             return;
 
         Set<String> likeSet = post.getLikes();
-        if(likeSet.contains(userName))
+        if (likeSet.contains(userName))
             likeSet.remove(userName);
         else
             return;
-        if(likeSet.size() == 0)
+        if (likeSet.size() == 0)
             post.setLikes(null);
         else
             post.setLikes(likeSet);
         repository.updatePost(post);
 
     }
-    
-    public void addCommentToPost(String name, String postID, String comment){
+
+    public void addCommentToPost(String name, String postID, String comment) {
         Post post = repository.findPostByID(postID);
         List<Comment> commentList = post.getComments();
         Comment commentObj = new Comment(name, comment);
